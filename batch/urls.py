@@ -2,5 +2,5 @@ from django.urls import path
 from .import views
 
 urlpatterns = [
-    # path('api/', views., name='index'),
+    path('api/show_batch', views.show_batch ),
 ]

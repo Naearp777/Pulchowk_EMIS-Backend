@@ -7,7 +7,7 @@ from rest_framework.permissions import  IsAuthenticated
 from rest_framework.response import Response
 
 # Create your views here.
-@api_view(['GET'])
+@api_view(['GET']) 
 def show_batch(request):
     batch = BatchSerializer(Batch.objects.all(), many=True)
     return Response(batch.data)

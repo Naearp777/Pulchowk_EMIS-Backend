@@ -1,4 +1,4 @@
-# from .models import * # Specific model to be imported
+from .models import * # Specific model to be imported
 from django.contrib import admin
 # Register your models here.
-# admin.site.register() 
+admin.site.register(Batch) 
