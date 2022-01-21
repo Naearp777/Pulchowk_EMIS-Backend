@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'customuser.apps.CustomuserConfig',
     'staff.apps.StaffConfig',
     'student.apps.StudentConfig',
+    'batch.apps.BatchConfig',
 ]
 
 MIDDLEWARE = [
