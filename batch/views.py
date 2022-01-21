@@ -20,4 +20,12 @@ def add_batch(request):
 class DestroyBatch(generics.RetrieveUpdateDestroyAPIView):
     queryset = Batch.objects.all()
     serializer_class = BatchSerializer
+    def delete(self, request, pk, format=None):
+        try:
+            batch = Batch.objects.get(pk=pk)
+            batch.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Batch.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
     
