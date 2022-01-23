@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'student.apps.StudentConfig',
     'authentication.apps.AuthenticationConfig',
     'customuser.apps.CustomuserConfig',
+    'batch.apps.BatchConfig',
+    'department.apps.DepartmentConfig',
+    'section.apps.SectionConfig',
 
 
 ]
