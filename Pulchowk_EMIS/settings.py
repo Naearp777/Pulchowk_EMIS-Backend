@@ -39,7 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'student.apps.StudentConfig',
+    'authentication.apps.AuthenticationConfig',
+    'customuser.apps.CustomuserConfig',
+
+
 ]
+
+
+AUTH_USER_MODEL = 'customuser.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
