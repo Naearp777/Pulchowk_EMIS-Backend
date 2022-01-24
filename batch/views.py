@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from logging import exception
 from django.shortcuts import render
 from .models import Batch
@@ -58,3 +59,8 @@ def update_batch(request, pk):
         serializer.save()
         return Response(serializer.data , status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+=======
+from django.shortcuts import render
+
+# Create your views here.
+>>>>>>> a-backend

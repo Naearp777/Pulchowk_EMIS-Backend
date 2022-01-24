@@ -9,19 +9,19 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('department', '0001_initial'),
+        ('batch', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='batch',
+            name='section',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('batch', models.CharField(max_length=100, null=True, unique=True)),
-                ('department', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='department.department')),
+                ('section', models.CharField(max_length=100, null=True, unique=True)),
+                ('batch', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='batch.batch')),
             ],
             options={
-                'verbose_name_plural': 'Batch',
+                'verbose_name_plural': 'Section',
             },
         ),
     ]

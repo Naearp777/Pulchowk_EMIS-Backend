@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from batch.models import batch
+from section.models import section
 
 # Register your models here.
-admin.site.register(batch)
+admin.site.register(section)

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class StaffConfig(AppConfig):
+class DepartmentAdminConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'staff'
+    name = 'department_admin'
