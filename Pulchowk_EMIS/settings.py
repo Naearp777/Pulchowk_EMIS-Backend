@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure--*#h$71mryy$tg!h1p^rb(hvhn=*mxu&oa7(3bltaxu3!ds8hd
 DEBUG = True
 ALLOWED_HOSTS = ['pulchowk-emis.herokuapp.com','*']
 
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
