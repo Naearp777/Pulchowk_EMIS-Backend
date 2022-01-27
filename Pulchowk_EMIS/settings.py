@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'batch.apps.BatchConfig',
     'department.apps.DepartmentConfig',
     'section.apps.SectionConfig',
+    'classes.apps.ClassesConfig',
+    'class_materials.apps.ClassMaterialsConfig',
 
 
 ]
