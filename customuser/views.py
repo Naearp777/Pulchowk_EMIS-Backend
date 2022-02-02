@@ -1,5 +1,7 @@
 from ast import If
 import re
+from batch.models import batch
+from department.models import department
 
 from section.models import section
 from .serializers import UserSerializer
@@ -47,10 +49,10 @@ def registerUser(request):
         serializer = UserSerializer(user, many=False)
         if(serializer.data['student']==True):
             student_info.objects.create(
-                student= data['student_id'],
-                department=data['department_info'],
-                batch=data['batch'],
-                section=data['section'],
+                student= User.objects.get(email=data['email']),
+                department=department.objects.get(department_name=data['department_name']),
+                batch=batch.objects.get(batch=data['batch']),
+                section=section.objects.get(section=data['section']),
             )
 
         email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
