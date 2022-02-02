@@ -1,5 +1,10 @@
+from ast import If
+import re
+
+from section.models import section
 from .serializers import UserSerializer
 from .models import User
+from student.models import student_info
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -9,13 +14,69 @@ from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.utils.crypto import get_random_string
-
+import csv
 # Create your views here.
 
 
 @api_view(['POST'])
 def registerUser(request):
     
+    data = request.data
+    try:
+        user = User.objects.create(
+            password=get_random_string(length=7),
+            email=data['email'],
+            first_name=data['first_name'],
+            middle_name=data['middle_name'],
+            last_name=data['last_name'],
+            roll_no=data['roll_no'],
+            address=data['address'],
+            gender=data['gender'],
+            phone=data['phone'],
+            dob=data['dob'],
+            admin=data['admin'],
+            student=data['student'],
+            department=data['department'],
+            staff=data['staff'],
+
+        )
+        
+        user = User.objects.get(email=data['email'])
+        user.images = request.FILES.get('images')
+        user.save()
+        serializer = UserSerializer(user, many=False)
+        if(serializer.data['student']==True):
+            student_info.objects.create(
+                student= data['student_id'],
+                department=data['department_info'],
+                batch=data['batch'],
+                section=data['section'],
+            )
+
+        email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
+                                           "password": serializer.data['password'], "email": serializer.data['email']})
+        sign_up = EmailMultiAlternatives(
+            "Account has been Created",
+            "Account has been Created",
+            settings.EMAIL_HOST_USER,
+            [serializer.data['email']],
+        )
+        sign_up.attach_alternative(email_template, 'text/html')
+        sign_up.send()
+        user.password=make_password(user.password)
+        user.save()
+        
+
+        return Response(serializer.data)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['POST'])
+def registerUser_csv(request):
+    file='import.csv'
+    data = csv.reader(open(file), delimiter=",")
     data = request.data
     try:
         user = User.objects.create(
@@ -56,6 +117,3 @@ def registerUser(request):
         return Response(serializer.data)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-
