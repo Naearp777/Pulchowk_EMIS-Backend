@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
-
+from django.utils.crypto import get_random_string
 
 # Create your views here.
 
@@ -17,10 +17,9 @@ from django.conf import settings
 def registerUser(request):
     
     data = request.data
-    print(data)
     try:
         user = User.objects.create(
-            password=make_password(data['password']),
+            password=get_random_string(length=7),
             email=data['email'],
             first_name=data['first_name'],
             middle_name=data['middle_name'],
@@ -52,7 +51,11 @@ def registerUser(request):
         )
         sign_up.attach_alternative(email_template, 'text/html')
         sign_up.send()
-
+        user.password=make_password(user.password)
+        user.save()
         return Response(serializer.data)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
