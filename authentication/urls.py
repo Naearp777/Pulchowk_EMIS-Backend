@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 from rest_framework_simplejwt.views import TokenVerifyView
 urlpatterns = [
     path('api/users/login/', views.MyTokenObtainPairView.as_view()),
-    path('api/users/login/verify', TokenVerifyView.as_view(),
+    path('api/users/token/verify', TokenVerifyView.as_view(),
          name='token_verify'),
          
          ]
