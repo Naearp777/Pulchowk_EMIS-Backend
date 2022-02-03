@@ -1,8 +1,5 @@
-from ast import If
-import re
 from batch.models import batch
 from department.models import department
-
 from section.models import section
 from .serializers import UserSerializer
 from .models import User
