@@ -16,3 +16,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 # Create your views here.
+
+def checktoken(request,id,token):
+    pass

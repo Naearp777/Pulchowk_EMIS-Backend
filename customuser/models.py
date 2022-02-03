@@ -55,8 +55,8 @@ class User(AbstractBaseUser):
     roll_no = models.CharField(max_length=255, null=True, unique=True)
     address = models.CharField(max_length=255, null=True)
     gender = models.CharField(max_length=100, null=True)
-    phone = models.CharField(blank=True, max_length=20)
-    dob=models.DateField(null=True,blank=True)
+    phone = models.CharField(null=True, max_length=20)
+    dob=models.CharField(null=True,blank=True,max_length=20)
     images = models.ImageField(
         default='avatar.jpg', upload_to='profile_Images')
     student = models.BooleanField(default=True)

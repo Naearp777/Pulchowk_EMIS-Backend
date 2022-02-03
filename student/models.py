@@ -10,7 +10,7 @@ class student_info(models.Model):
     batch=models.ForeignKey(batch,on_delete=models.CASCADE)
     section=models.ForeignKey(section,on_delete=models.CASCADE)
     def __str__(self):
-        return f'{self.section}--{self.batch}--{self.department}'
+        return f'{self.student}--{self.section}--{self.batch}--{self.department}'
 
     class Meta:
         verbose_name_plural = "student_info"
