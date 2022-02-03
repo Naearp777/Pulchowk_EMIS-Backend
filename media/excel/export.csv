@@ -1,3 +1,3 @@
-id,password,last_login,email,first_name,middle_name,last_name,roll_no,address,gender,phone,dob,images,student,staff,department,admin
-1,pbkdf2_sha256$320000$BrcQobJJ33Gt7KmBfQT1J9$JFHHAWyMATvPsUWhHzOMaC7Eldo1jTGowFrKelqa5Ho=,2022-02-03T12:46:13.751645Z,admin@gmail.com,,,,,,,,,/media/avatar.jpg,True,True,False,True
-2,helloworld@sha256,,saugatkafley@gmail.com,Saugat,Kumar,Kafley,1,44700,Male,+9779863632806,2000/05/13,/media/avatar.jpg,True,False,False,False
+email,first_name,middle_name,last_name,roll_no,address,gender,phone,dob,student,staff,department,admin
+pokharel04@gmail.com,aa,bb,cc,15,44700,Male,9.78E+12,13/05/2000,TRUE,FALSE,FALSE,FALSE
+075bct099.saugat@gmail.com,Saugat,Kumar,Kafley,99,44700,Male,9.78E+12,13/05/2000,TRUE,FALSE,FALSE,FALSE
