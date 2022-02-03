@@ -1,9 +1,10 @@
+from asyncio import exceptions
 from django import views
 from batch.models import batch
 from department.models import department
 from section.models import section
 from .serializers import UserSerializer
-from .models import User
+from .models import ExcelFileUpload, User
 from student.models import student_info
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -130,6 +131,16 @@ class ExportUserCSV(APIView):
         serializer = UserSerializer(users, many=True)
         df  = pd.DataFrame(serializer.data)
         df.to_csv('media/excel/export.csv', index=False)
-        print(df)
+        # print(df)
         return Response(serializer.data)
-    
+
+class ImportUserCSV(APIView):
+    def post(self,request):
+        
+        excel_upload = ExcelFileUpload.objects.create()
+        excel_upload.excel_file = request.FILES.get('files')
+        df = pd.read_csv(f"{settings.BASE_DIR}/media/excel/{excel_upload.excel_file}")
+        print(df.values.tolist())
+        return Response(status=status.HTTP_200_OK)
+        # except exceptions as e:
+        #     return Response(e , status=status.HTTP_400_BAD_REQUEST)
