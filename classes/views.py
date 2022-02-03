@@ -19,15 +19,12 @@ def create_class(request):
       
         print(data['t_id'])
         for t in data['t_id'].split(","):
-            print(t)
             t = User.objects.get(id=t)
-            print(t)
             showclass.teacher.add(t)
             showclass.save()
 
         for s in data['s_id'].split(","):
             s = User.objects.get(id=s)
-            print(s)
             showclass.student.add(s)
             showclass.save()
 
