@@ -1,3 +1,4 @@
+from django import views
 from batch.models import batch
 from department.models import department
 from section.models import section
@@ -116,3 +117,19 @@ def registerUser_csv(request):
         return Response(serializer.data)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+  
+from rest_framework import generics
+import pandas as pd
+from rest_framework.views import APIView
+from django.conf import settings
+class ExportUserCSV(APIView):
+    
+    def get(self , request):
+        users  = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        df  = pd.DataFrame(serializer.data)
+        df.to_csv('media/excel/export.csv', index=False)
+        print(df)
+        return Response(serializer.data)
+    
