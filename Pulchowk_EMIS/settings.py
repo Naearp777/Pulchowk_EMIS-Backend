@@ -43,9 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'student.apps.StudentConfig',
-    'corsheaders',
     'authentication.apps.AuthenticationConfig',
     'customuser.apps.CustomuserConfig',
     'batch.apps.BatchConfig',
@@ -96,6 +96,7 @@ AUTH_USER_MODEL = 'customuser.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
