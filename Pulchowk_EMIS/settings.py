@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'student.apps.StudentConfig',
+    'corsheaders',
     'authentication.apps.AuthenticationConfig',
     'customuser.apps.CustomuserConfig',
     'batch.apps.BatchConfig',
