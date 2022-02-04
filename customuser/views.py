@@ -157,16 +157,16 @@ class ImportUserCSV(APIView):
             department  =user[11],
             admin       =user[12],
             )
-            user = User.objects.get(email=user[0])
-            serializer = UserSerializer(user, many=False)
+            new_user = User.objects.get(email=user[0])
+            serializer = UserSerializer(new_user, many=False)
             
-            # if(serializer.data['student']==True):
-            #     student_info.objects.create(
-            #     student= User.objects.get(email=data['email']),
-            #     department=department.objects.get(department_name=data['department_name']),
-            #     batch=batch.objects.get(batch=data['batch']),
-            #     section=section.objects.get(section=data['section']),
-            # )
+            if(serializer.data['student']==True):
+                student_info.objects.create(
+                student= User.objects.get(email=user[0]),
+                department=department.objects.get(department_name=user[13]),
+                batch=batch.objects.get(batch=user[14]),
+                section=section.objects.get(section=user[15]),
+            )
             email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
                                             "password": serializer.data['password'], "email": serializer.data['email']})
             sign_up = EmailMultiAlternatives(
@@ -177,6 +177,6 @@ class ImportUserCSV(APIView):
             )
             sign_up.attach_alternative(email_template, 'text/html')
             sign_up.send()
-            user.password=make_password(user.password)
-            user.save()
+            new_user.password=make_password(new_user.password)
+            new_user.save()
         return Response(status=status.HTTP_201_CREATED)
