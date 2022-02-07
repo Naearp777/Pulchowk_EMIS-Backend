@@ -99,3 +99,5 @@ class User(AbstractBaseUser):
     def is_admin(self):
 
         return self.admin
+class ExcelFileUpload(models.Model):
+    excel_file = models.FileField(upload_to='excel') # a Model for recording the excel file
