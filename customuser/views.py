@@ -14,6 +14,9 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.utils.crypto import get_random_string
 import csv
+import pandas as pd
+from rest_framework.views import APIView
+from django.conf import settings
 # Create your views here.
 
 
@@ -72,56 +75,7 @@ def registerUser(request):
 
 
 
-@api_view(['POST'])
-def registerUser_csv(request):
-    file='import.csv'
-    data = csv.reader(open(file), delimiter=",")
-    data = request.data
-    try:
-        user = User.objects.create(
-            password=get_random_string(length=7),
-            email=data['email'],
-            first_name=data['first_name'],
-            middle_name=data['middle_name'],
-            last_name=data['last_name'],
-            roll_no=data['roll_no'],
-            address=data['address'],
-            gender=data['gender'],
-            phone=data['phone'],
-            dob=data['dob'],
-            admin=data['admin'],
-            student=data['student'],
-            department=data['department'],
-            staff=data['staff'],
 
-        )
-        
-        user = User.objects.get(email=data['email'])
-        user.images = request.FILES.get('images')
-        user.save()
-        serializer = UserSerializer(user, many=False)
-
-        email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
-                                           "password": serializer.data['password'], "email": serializer.data['email']})
-        sign_up = EmailMultiAlternatives(
-            "Account has been Created",
-            "Account has been Created",
-            settings.EMAIL_HOST_USER,
-            [serializer.data['email']],
-        )
-        sign_up.attach_alternative(email_template, 'text/html')
-        sign_up.send()
-        user.password=make_password(user.password)
-        user.save()
-        return Response(serializer.data)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-
-import pandas as pd
-from rest_framework.views import APIView
-from django.conf import settings
 class ExportUserCSV(APIView):
     
     def get(self , request):
