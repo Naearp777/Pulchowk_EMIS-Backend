@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'section.apps.SectionConfig',
     'classes.apps.ClassesConfig',
     'class_materials.apps.ClassMaterialsConfig',
+    'notice.apps.NoticeConfig',
 
 
 ]
