@@ -31,7 +31,6 @@ def registerUser(request):
             first_name=data['first_name'],
             middle_name=data['middle_name'],
             last_name=data['last_name'],
-            roll_no=data['roll_no'],
             address=data['address'],
             gender=data['gender'],
             phone=data['phone'],
@@ -50,6 +49,7 @@ def registerUser(request):
         if(serializer.data['student']==True):
             student_info.objects.create(
                 student= User.objects.get(email=data['email']),
+                rollno=data['roll_no'],
                 department=department.objects.get(department_name=data['department_name']),
                 batch=batch.objects.get(batch=data['batch']),
                 section=section.objects.get(section=data['section']),
@@ -100,7 +100,6 @@ class ImportUserCSV(APIView):
             first_name  =user[1],
             middle_name =user[2],
             last_name   =user[3],
-            roll_no     =user[4],
             address     =user[5],
             gender      =user[6],
             phone       =user[7],
@@ -116,6 +115,7 @@ class ImportUserCSV(APIView):
             if(serializer.data['student']==True):
                 student_info.objects.create(
                 student= User.objects.get(email=user[0]),
+                rollno=user[4],
                 department=department.objects.get(department_name=user[13]),
                 batch=batch.objects.get(batch=user[14]),
                 section=section.objects.get(section=user[15]),
