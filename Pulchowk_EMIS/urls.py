@@ -28,4 +28,6 @@ urlpatterns = [
     path('', include("classes.urls")),
     path('', include("department.urls")),
     path('', include("notice.urls")),
+    path('', include("batch.urls")),
+    path('', include("section.urls")),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
