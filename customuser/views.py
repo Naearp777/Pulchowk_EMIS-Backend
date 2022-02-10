@@ -40,7 +40,6 @@ def registerUser(request):
             student=data['student'],
             department=data['department'],
             staff=data['staff'],
-
         )
         
         user = User.objects.get(email=data['email'])
@@ -53,7 +52,7 @@ def registerUser(request):
                 rollno=data['roll_no'],
                 department=department.objects.get(name=data['department_name']),
                 batch=batch.objects.get(name=data['batch']),
-                section=section.objects.get(sname=data['section']),
+                section=section.objects.get(name=data['section']),
             )
         if(serializer.data['staff']==True):
                 Teachers_info.objects.create(
