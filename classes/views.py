@@ -43,3 +43,4 @@ def show_class(request,pk):
     showclass=classes.objects.get(id=pk)
     serializer = ClassSerializer(showclass, many=False)
     return Response(serializer.data)
+    

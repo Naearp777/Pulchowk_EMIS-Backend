@@ -74,7 +74,7 @@ def registerUser(request):
         user.save()
         
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -143,3 +143,4 @@ class ImportUserCSV(APIView):
             new_user.password=make_password(new_user.password)
             new_user.save()
         return Response(status=status.HTTP_201_CREATED)
+     
