@@ -4,6 +4,7 @@ from section.models import section
 from .serializers import UserSerializer,UserExportSerializer
 from .models import User,ExcelFileUpload
 from student.models import student_info
+from teacher.models import Teachers_info
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -53,6 +54,10 @@ def registerUser(request):
                 department=department.objects.get(department_name=data['department_name']),
                 batch=batch.objects.get(batch=data['batch']),
                 section=section.objects.get(section=data['section']),
+            )
+        if(serializer.data['staff']==True):
+                Teachers_info.objects.create(
+                department=department.objects.get(department_name=data['department_name']),
             )
 
         email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
@@ -119,6 +124,11 @@ class ImportUserCSV(APIView):
                 department=department.objects.get(department_name=user[13]),
                 batch=batch.objects.get(batch=user[14]),
                 section=section.objects.get(section=user[15]),
+            )
+            if(serializer.data['staff']==True):
+                Teachers_info.objects.create(
+                department=department.objects.get(department_name=user[13]),
+               
             )
             email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
                                             "password": serializer.data['password'], "email": serializer.data['email']})
