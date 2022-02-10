@@ -51,13 +51,13 @@ def registerUser(request):
             student_info.objects.create(
                 student= User.objects.get(email=data['email']),
                 rollno=data['roll_no'],
-                department=department.objects.get(department_name=data['department_name']),
-                batch=batch.objects.get(batch=data['batch']),
-                section=section.objects.get(section=data['section']),
+                department=department.objects.get(name=data['department_name']),
+                batch=batch.objects.get(name=data['batch']),
+                section=section.objects.get(sname=data['section']),
             )
         if(serializer.data['staff']==True):
                 Teachers_info.objects.create(
-                department=department.objects.get(department_name=data['department_name']),
+                department=department.objects.get(name=data['department_name']),
             )
 
         email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
