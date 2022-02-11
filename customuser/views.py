@@ -145,3 +145,17 @@ class ImportUserCSV(APIView):
             new_user.save()
         return Response(status=status.HTTP_201_CREATED)
      
+
+
+@api_view(['POST'])
+def update_profile(request,u_id):
+    data = request.data
+    try:
+        user = User.objects.get(id=u_id)
+        user.images = request.FILES.get('image')
+        user.save()
+        return Response({"message":"Image updated successfully"},status=status.HTTP_201_CREATED)
+    except:
+        return Response({"message":"Image not updated"},status=status.HTTP_400_BAD_REQUEST)
+
+    

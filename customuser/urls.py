@@ -5,4 +5,5 @@ urlpatterns = [
     path('api/register/user/', views.registerUser, name='register_user'),
     path('api/export/user/', views.ExportUserCSV.as_view(), name='export_user'),
     path('api/import/user/', views.ImportUserCSV.as_view(), name='import_user'),
+    path('api/users/update_profile/<int:u_id>/',views.update_profile,name='update_profile'),
 ]
