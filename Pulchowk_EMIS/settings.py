@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'student.apps.StudentConfig',
     'authentication.apps.AuthenticationConfig',
     'django_rest_passwordreset',
     'customuser.apps.CustomuserConfig',
@@ -52,6 +51,8 @@ INSTALLED_APPS = [
     'notice.apps.NoticeConfig',
     'teacher.apps.TeacherConfig',
     'miscellaenous.apps.MiscellaenousConfig',
+    'student.apps.StudentConfig',
+
 
 
 ]
