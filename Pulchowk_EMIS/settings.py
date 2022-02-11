@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'class_materials.apps.ClassMaterialsConfig',
     'notice.apps.NoticeConfig',
     'teacher.apps.TeacherConfig',
+    'miscellaenous.apps.MiscellaenousConfig',
 
 
 ]

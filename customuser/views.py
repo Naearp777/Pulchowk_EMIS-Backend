@@ -40,6 +40,8 @@ def registerUser(request):
             student=data['student'],
             department=data['department'],
             staff=data['staff'],
+            password_changed=data['password_changed'],
+
         )
         
         user = User.objects.get(email=data['email'])
