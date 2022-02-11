@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'student.apps.StudentConfig',
     'authentication.apps.AuthenticationConfig',
+    'django_rest_passwordreset',
     'customuser.apps.CustomuserConfig',
     'batch.apps.BatchConfig',
     'department.apps.DepartmentConfig',
@@ -62,6 +63,15 @@ REST_FRAMEWORK = {
     )
 }
 
+DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
+    "CLASS": "django_rest_passwordreset.tokens.RandomStringTokenGenerator",
+    "OPTIONS": {
+        "min_length": 5,
+        "max_length": 5,
+        "min_number": 1,
+        "max_number": 999,
+    }
+}
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
