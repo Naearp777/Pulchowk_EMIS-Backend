@@ -22,6 +22,8 @@ admin.site.site_title = "Pulchwok_EMIS"
 admin.site.index_title = "Welcome to Pulchwok_EMIS"
 
 urlpatterns = [
+    path('jet/', include('jet.urls', 'jet')),
+    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('admin/', admin.site.urls),
     path('', include("authentication.urls")),
     path('', include("customuser.urls")),
