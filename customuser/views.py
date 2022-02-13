@@ -58,6 +58,7 @@ def registerUser(request):
             )
         if(serializer.data['staff']==True):
                 Teachers_info.objects.create(
+                teacher= User.objects.get(email=data['email']),
                 department=department.objects.get(name=data['department_name']),
             )
 
@@ -129,6 +130,7 @@ class ImportUserCSV(APIView):
                 )
                 if(serializer.data['staff']==True):
                     Teachers_info.objects.create(
+                    teacher= User.objects.get(email=user[0]),
                     department=department.objects.get(department_name=user[13]),
                 
                 )
