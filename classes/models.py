@@ -3,6 +3,7 @@ from customuser.models import User
 # Create your models here.
 class classes(models.Model):
     class_name=models.CharField(null=True, unique=True, max_length=100)
+    alias=models.CharField(null=True, unique=True, max_length=100)
     teacher=models.ManyToManyField(User,related_name='teacher')
     student=models.ManyToManyField(User)
 
