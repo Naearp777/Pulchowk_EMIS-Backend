@@ -4,6 +4,8 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
+
+
 # Create your views here
 
 @api_view(['POST'])
@@ -17,3 +19,6 @@ def password_reset(request,u_id):
     except:
         return Response({"message":"Password Not Changed"},status=status.HTTP_400_BAD_REQUEST)
     
+
+
+
