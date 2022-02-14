@@ -162,4 +162,28 @@ def update_profile(request,u_id):
     except:
         return Response({"message":"Image not updated"},status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+def delete_user(request,u_id):
+    try:
+        user = User.objects.get(id=u_id)
+        user.delete()
+        return Response({"message":"User deleted successfully"},status=status.HTTP_201_CREATED)
+    except:
+        return Response({"message":"User not deleted"},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_user_by_id(request,u_id):
+    try:
+        user = User.objects.get(id=u_id)
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except:
+        return Response({"message":"User not found"},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
     
