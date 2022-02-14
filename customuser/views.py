@@ -24,6 +24,7 @@ from django.conf import settings
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def registerUser(request):
     
     data = request.data
@@ -84,7 +85,7 @@ def registerUser(request):
 
 
 
-
+@permission_classes([IsAuthenticated])
 class ExportUserCSV(APIView):
     
     def get(self , request):
@@ -94,7 +95,7 @@ class ExportUserCSV(APIView):
         df.to_csv('media/excel/export.csv', index=False)
         # print(df)
         return Response(serializer.data)
-
+@permission_classes([IsAuthenticated])
 class ImportUserCSV(APIView):
     def post(self,request):
         try:
@@ -154,6 +155,7 @@ class ImportUserCSV(APIView):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def update_profile(request,u_id):
     data = request.data
     try:
@@ -165,6 +167,7 @@ def update_profile(request,u_id):
         return Response({"message":"Image not updated"},status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_user(request,u_id):
     try:
         user = User.objects.get(id=u_id)
@@ -174,6 +177,7 @@ def delete_user(request,u_id):
         return Response({"message":"User not deleted"},status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_user_by_id(request,u_id):
     try:
         user = User.objects.get(id=u_id)

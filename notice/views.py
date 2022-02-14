@@ -4,7 +4,8 @@ from django.shortcuts import render
 from notice.serializers import NoticeSerializer
 from .models import notice
 from classes.models import classes
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from customuser.models import User
@@ -12,6 +13,7 @@ from customuser.models import User
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def createnotice_teacher(request,c_id):
   data=request.data
   try:
@@ -28,12 +30,14 @@ def createnotice_teacher(request,c_id):
     return Response(status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def show_notice(request,c_id):
   shownotice=notice.objects.filter(publish_to=c_id)
   serializer = NoticeSerializer(shownotice, many=True)
   return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_globalnotice(request):
   data=request.data
   try:
@@ -50,12 +54,14 @@ def create_globalnotice(request):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def show_globalnotice(request,pk):
   shownotice=notice.objects.filter(publish_to=pk)
   serializer = NoticeSerializer(shownotice, many=True)
   return Response(serializer.data)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_notice(request,pk):
   try:
     notice.objects.get(id=pk).delete()
@@ -64,6 +70,7 @@ def delete_notice(request,pk):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def update_notice(request,pk):
   try:
     update_notice=notice.objects.get(id=pk)
@@ -80,6 +87,7 @@ def update_notice(request,pk):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_globalnotice(request,pk):
   try:
     notice.objects.get(id=pk).delete()
@@ -88,6 +96,7 @@ def delete_globalnotice(request,pk):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def update_globalnotice(request,pk):
   try:
     update_notice=notice.objects.get(id=pk)
