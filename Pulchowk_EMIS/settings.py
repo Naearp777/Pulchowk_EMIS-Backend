@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'corsheaders',
     'authentication.apps.AuthenticationConfig',
     'django_rest_passwordreset',
     'customuser.apps.CustomuserConfig',
