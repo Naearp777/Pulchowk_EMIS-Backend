@@ -30,3 +30,42 @@ def Department_display_all(request):
     all_departments = department.objects.all()
     serializer = DepartmentSerializer(all_departments, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def Department_display_by_id(request,pk):
+    showdepartment=department.objects.get(id=pk)
+    serializer=DepartmentSerializer(showdepartment,many=False)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def Department_display_by_alias(request,alias):
+    showdepartment=department.objects.get(alias=alias)
+    serializer=DepartmentSerializer(showdepartment,many=False)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def Department_update(request,pk):
+    data=request.data
+    try:
+        updatedepartment=department.objects.get(id=pk)
+        updatedepartment.name=data['department_name']
+        updatedepartment.description=data['description']
+        updatedepartment.alias=data['alias']
+        updatedepartment.save()
+        serializer=DepartmentSerializer(updatedepartment,many=False)
+        return Response(serializer.data)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def Department_delete(request,pk):
+    try:
+        deletedepartment=department.objects.get(id=pk)
+        deletedepartment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
