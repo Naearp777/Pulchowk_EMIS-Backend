@@ -154,7 +154,7 @@ class ImportUserCSV(APIView):
                 new_user.password=make_password(new_user.password)
                 new_user.save()
             return Response( { "message" : "User importted sucessfully!"} , status=status.HTTP_201_CREATED)
-        except exceptions as e:
+        except Exception as e:
             return Response( {"message " : str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
 

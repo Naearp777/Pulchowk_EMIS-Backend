@@ -1,5 +1,3 @@
-from ast import alias
-from pyexpat import model
 from django.shortcuts import render
 from .models import department
 from .serializers import DepartmentSerializer
@@ -19,25 +17,31 @@ def createdepartment(request):
             alias=data['alias']
         )
         serializer=DepartmentSerializer(newdepartment,many=False)
-        return Response(serializer.data)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data , status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response( {"message" : str(e) } , status=status.HTTP_400_BAD_REQUEST)
 
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def Department_display_all(request):
-    all_departments = department.objects.all()
-    serializer = DepartmentSerializer(all_departments, many=True)
-    return Response(serializer.data)
+    try :
+        all_departments = department.objects.all()
+        serializer = DepartmentSerializer(all_departments, many=True)
+        return Response(serializer.data  ,status= status.HTTP_200_OK)
+    except Exception as e:
+        return Response( {"message" : str(e) } , status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def Department_display_by_id(request,pk):
-    showdepartment=department.objects.get(id=pk)
-    serializer=DepartmentSerializer(showdepartment,many=False)
-    return Response(serializer.data)
+    try:
+        showdepartment=department.objects.get(id=pk)
+        serializer=DepartmentSerializer(showdepartment,many=False)
+        return Response(serializer.data , status  = status.HTTP_200_OK)
+    except Exception as e:
+        return Response ({"message" : str(e) } , status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -58,8 +62,8 @@ def Department_update(request,pk):
         updatedepartment.save()
         serializer=DepartmentSerializer(updatedepartment,many=False)
         return Response(serializer.data)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response( {"message" : str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -67,6 +71,6 @@ def Department_delete(request,pk):
     try:
         deletedepartment=department.objects.get(id=pk)
         deletedepartment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response( {"message": "Department has been deleted."}, status=status.HTTP_204_NO_CONTENT)
+    except Exception as e:
+        return Response( {"message" : str(e)} , status=status.HTTP_400_BAD_REQUEST)
