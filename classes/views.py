@@ -1,3 +1,4 @@
+from re import A
 from django.shortcuts import render
 from classes.models import classes
 from customuser.models import User
@@ -68,3 +69,26 @@ def show_class_by_department(request,pk):
     showclass=classes.objects.filter(department=pk)
     serializer = ClassSerializer(showclass, many=True)
     return Response(serializer.data)
+
+@api_view(['PUT'])
+def update_class(request,pk):
+    data = request.data
+    try:
+        classes.objects.filter(id=pk).update(
+            name=data['class_name'],
+            teacher=data['t_id'],
+            student=data['s_id'],
+        )
+        return Response({"message":"Class updated successfully"},status=status.HTTP_201_CREATED)
+    except:
+        return Response({"message":"Class not updated"},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def delete_class(request,pk):
+    try:
+        classes.objects.filter(id=pk).delete()
+        return Response({"message":"Class deleted successfully"},status=status.HTTP_201_CREATED)
+    except:
+        return Response({"message":"Class not deleted"},status=status.HTTP_400_BAD_REQUEST)
+
+
