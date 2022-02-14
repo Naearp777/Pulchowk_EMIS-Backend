@@ -1,3 +1,4 @@
+from ast import alias
 from pyexpat import model
 from django.shortcuts import render
 from .models import department
@@ -12,8 +13,9 @@ def createdepartment(request):
     data=request.data
     try:
         newdepartment=department.objects.create(
-            department_name=data['department_name'],
-            description=data['description']
+            name=data['department_name'],
+            description=data['description'],
+            alias=data['alias']
         )
         serializer=DepartmentSerializer(newdepartment,many=False)
         return Response(serializer.data)

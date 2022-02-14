@@ -13,9 +13,9 @@ def create_class(request):
     print(data)
     try:
         newclass = classes.objects.create(
-            class_name=data['class_name'],
+            name=data['class_name'],
         )
-        showclass=classes.objects.get(class_name=data['class_name'])
+        showclass=classes.objects.get(name=data['class_name'])
       
         print(data['t_id'])
         for t in data['t_id'].split(","):
@@ -44,3 +44,27 @@ def show_class(request,pk):
     serializer = ClassSerializer(showclass, many=False)
     return Response(serializer.data)
     
+
+@api_view(['GET'])
+def show_all_class(request):
+    all_classes = classes.objects.all()
+    serializer = ClassSerializer(all_classes, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def show_class_by_teacher(request,pk):
+    showclass=classes.objects.filter(teacher=pk)
+    serializer = ClassSerializer(showclass, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def show_class_by_student(request,pk):
+    showclass=classes.objects.filter(student=pk)
+    serializer = ClassSerializer(showclass, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def show_class_by_department(request,pk):
+    showclass=classes.objects.filter(department=pk)
+    serializer = ClassSerializer(showclass, many=True)
+    return Response(serializer.data)

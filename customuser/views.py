@@ -124,14 +124,14 @@ class ImportUserCSV(APIView):
                     student_info.objects.create(
                     student= User.objects.get(email=user[0]),
                     rollno=user[4],
-                    department=department.objects.get(department_name=user[13]),
+                    department=department.objects.get(name=user[13]),
                     batch=batch.objects.get(batch=user[14]),
                     section=section.objects.get(section=user[15]),
                 )
                 if(serializer.data['staff']==True):
                     Teachers_info.objects.create(
                     teacher= User.objects.get(email=user[0]),
-                    department=department.objects.get(department_name=user[13]),
+                    department=department.objects.get(name=user[13]),
                 
                 )
                 email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
