@@ -80,8 +80,8 @@ def registerUser(request):
         
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"message" : str(e)}  , status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -97,8 +97,8 @@ class ExportUserCSV(APIView):
             df.to_csv('media/excel/export.csv', index=False)
             # print(df)
             return Response(serializer.data , status=status.HTTP_200_OK)
-        except exceptions as e:
-            return Response(e , status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"message" : str(e)}  , status=status.HTTP_400_BAD_REQUEST)
 @permission_classes([IsAuthenticated])
 class ImportUserCSV(APIView):
     def post(self,request):

@@ -54,8 +54,8 @@ def create_globalnotice(request):
 
     )
     return Response(status=status.HTTP_201_CREATED)
-  except:
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+  except Exception as e:
+    return Response( {"message" : str(e)} ,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -69,9 +69,9 @@ def show_globalnotice(request,pk):
 def delete_notice(request,pk):
   try:
     notice.objects.get(id=pk).delete()
-    return Response(status=status.HTTP_200_OK)
-  except:
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_204_NO_CONTENT)
+  except Exception as e:
+    return Response( {"message" : str(e)}  , status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
@@ -86,8 +86,8 @@ def update_notice(request,pk):
     update_notice.publish_by=data['publish_by']
     update_notice.save()
     return Response(status=status.HTTP_200_OK)
-  except:
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+  except Exception as e:
+    return Response( {"message" : str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE'])
@@ -96,8 +96,8 @@ def delete_globalnotice(request,pk):
   try:
     global_notice.objects.get(id=pk).delete()
     return Response(status=status.HTTP_200_OK)
-  except:
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+  except Exception as e:
+    return Response({"message" : str(e)}  ,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
@@ -112,6 +112,6 @@ def update_globalnotice(request,pk):
     update_notice.publish_by=data['publish_by']
     update_notice.save()
     return Response(status=status.HTTP_200_OK)
-  except:
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+  except Exception as e:
+    return Response( {"message" : str(e)} ,status=status.HTTP_400_BAD_REQUEST)
 
