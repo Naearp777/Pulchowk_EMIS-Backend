@@ -14,5 +14,10 @@ class CustomUserAdmin(admin.ModelAdmin):
         ('Permissions',{'fields':('admin','staff','student')}),
         ('Other Info',{'fields':('password_changed','last_login')}),
     )
+    list_display=('email','first_name','middle_name','last_name','phone','dob','admin','staff','student')
+    list_filter=('admin','staff','student')
+    search_fields=('email','first_name','middle_name','last_name','phone','dob','admin','staff','student')
+    list_per_page=25
+    
 
 admin.site.register(User,CustomUserAdmin)

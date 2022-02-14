@@ -21,7 +21,6 @@ def create_assignment(request,c_id,t_id):
         title=data['title'],
         description=data['description'],
         due_date=data['due_date'],
-        completed=data['completed'],
         created_at=data['created_at'],
         updated_at=data['updated_at'],
         teacher_files=request.FILES.get('teacher_files'),
@@ -54,4 +53,49 @@ def show_all_assignment_given_by_teacher_in_specific_class(request,t_id,c_id):
     showassignment=Give_Assignments.objects.filter(teacher=t_id,classes=c_id)
     serializer = Give_AssignmentsSerializer(showassignment, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def show_submitted_assignments_for_an_assignment(request,a_id):
+    showassignment=Submit_Assignments.objects.filter(assignment=a_id)
+    serializer = Submit_AssignmentsSerializer(showassignment, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def show_all_submitted_assignments_for_a_student(request,s_id):
+    showassignment=Submit_Assignments.objects.filter(student=s_id)
+    serializer = Submit_AssignmentsSerializer(showassignment, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def show_all_submitted_assignments_for_a_student_in_a_class(request,s_id,c_id): 
+    showassignment=Submit_Assignments.objects.filter(student=s_id,assignment__classes=c_id)
+    serializer = Submit_AssignmentsSerializer(showassignment, many=True)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def update_assignment(request,pk):
+    data=request.data
+    try:
+        updateassignment=Give_Assignments.objects.get(id=pk)
+        updateassignment.title=data['title']
+        updateassignment.description=data['description']
+        updateassignment.due_date=data['due_date']
+        updateassignment.created_at=data['created_at']
+        updateassignment.updated_at=data['updated_at']
+        updateassignment.teacher_files=request.FILES.get('teacher_files')
+        updateassignment.save()
+        return Response ({"message":"Assignment updated successfully"},status=status.HTTP_201_CREATED)
+    except:
+        return Response ({"message":"Assignment not updated"},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def delete_assignment(request,pk):
+    try:
+        deleteassignment=Give_Assignments.objects.get(id=pk)
+        deleteassignment.delete()
+        return Response ({"message":"Assignment deleted successfully"},status=status.HTTP_201_CREATED)
+    except:
+        return Response ({"message":"Assignment not deleted"},status=status.HTTP_400_BAD_REQUEST)
+
+
 
