@@ -18,6 +18,7 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_filter=('admin','staff','student')
     search_fields=('email','first_name','middle_name','last_name','phone','dob','admin','staff','student')
     list_per_page=25
-    
+
 
 admin.site.register(User,CustomUserAdmin)
+

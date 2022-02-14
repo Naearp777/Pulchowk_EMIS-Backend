@@ -97,5 +97,9 @@ def delete_assignment(request,pk):
     except:
         return Response ({"message":"Assignment not deleted"},status=status.HTTP_400_BAD_REQUEST)
 
-
+@api_view(['GET'])
+def show_all_assignments_for_a_student(request,s_id):
+    showassignment=Give_Assignments.objects.filter(student=s_id)
+    serializer = Give_AssignmentsSerializer(showassignment, many=True)
+    return Response(serializer.data)
 

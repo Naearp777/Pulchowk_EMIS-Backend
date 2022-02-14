@@ -5,6 +5,7 @@ from class_materials.models import materials,folder
 from classes.models import classes
 from customuser.models import User
 from rest_framework.decorators import api_view
+from .serializers import MaterialsSerializer,FolderSerializer
 # Create your views here.
 @api_view(['POST'])
 def upload_materials(request,f_id):
@@ -36,3 +37,25 @@ def create_folder(request,c_id,t_id):
         return Response({"message":"Folder created successfully"},status=status.HTTP_201_CREATED)
     except:
         return Response({"message":"Folder not created"},status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def update_folder(request,pk):
+    data=request.data
+    try:
+        folder.objects.filter(id=pk).update(
+            folder_name=data['folder_name'],
+            updated_at=data['updated_at'],
+        )
+        return Response({"message":"Folder updated successfully"},status=status.HTTP_201_CREATED)
+    except:
+        return Response({"message":"Folder not updated"},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def delete_folder(request,pk):
+    try:
+        folder.objects.filter(id=pk).delete()
+        return Response({"message":"Folder deleted successfully"},status=status.HTTP_201_CREATED)
+    except:
+        return Response({"message":"Folder not deleted"},status=status.HTTP_400_BAD_REQUEST)
+
