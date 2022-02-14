@@ -41,15 +41,17 @@ def Department_display_by_id(request,pk):
         serializer=DepartmentSerializer(showdepartment,many=False)
         return Response(serializer.data , status  = status.HTTP_200_OK)
     except Exception as e:
-        return Response ({"message" : str(e) } , status=status.HTTP_400_BAD_REQUEST)
+        return Response ({"message" : str(e) } , status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def Department_display_by_alias(request,alias):
-    showdepartment=department.objects.get(alias=alias)
-    serializer=DepartmentSerializer(showdepartment,many=False)
-    return Response(serializer.data)
-
+    try:
+        showdepartment=department.objects.get(alias=alias)
+        serializer=DepartmentSerializer(showdepartment,many=False)
+        return Response(serializer.data , status  = status.HTTP_200_OK)
+    except Exception as e:
+        return Response ({"message" : str(e) } , status=status.HTTP_404_NOT_FOUND)
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def Department_update(request,pk):
@@ -61,7 +63,7 @@ def Department_update(request,pk):
         updatedepartment.alias=data['alias']
         updatedepartment.save()
         serializer=DepartmentSerializer(updatedepartment,many=False)
-        return Response(serializer.data)
+        return Response(serializer.data , status=status.HTTP_202_ACCEPTED)
     except Exception as e:
         return Response( {"message" : str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
