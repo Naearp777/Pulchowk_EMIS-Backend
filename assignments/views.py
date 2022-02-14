@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import Give_AssignmentsSerializer,Submit_AssignmentsSerializer
 from rest_framework.decorators import api_view
-
+from notice.models import notice
 # Create your views here.
 
 @api_view(['POST'])
@@ -24,6 +24,13 @@ def create_assignment(request,c_id,t_id):
         created_at=data['created_at'],
         updated_at=data['updated_at'],
         teacher_files=request.FILES.get('teacher_files'),
+        )
+        notice.objects.create(
+            title=data['title'],
+            content=data['description'],
+            created_at=data['created_at'],
+            publish_to=classes.objects.get(id=c_id),
+            publish_by=User.objects.get(id=t_id).first_name+" "+User.objects.get(id=t_id).last_name,
         )
         return Response ({"message":"Assignment created successfully"},status=status.HTTP_201_CREATED)
     except:
