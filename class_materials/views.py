@@ -59,3 +59,20 @@ def delete_folder(request,pk):
     except:
         return Response({"message":"Folder not deleted"},status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def show_folder(request,pk):
+    try:
+        folder_data=folder.objects.get(id=pk)
+        serializer=FolderSerializer(folder_data)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except:
+        return Response({"message":"Folder not found"},status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def show_all_folder_in_a_specific_class(request,c_id,t_id):
+    try:
+        folder_data=folder.objects.filter(classes=c_id,teacher=t_id)
+        serializer=FolderSerializer(folder_data,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except:
+        return Response({"message":"Folder not found"},status=status.HTTP_404_NOT_FOUND)
