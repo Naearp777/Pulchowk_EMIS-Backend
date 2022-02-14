@@ -6,6 +6,7 @@ from customuser.models import User
 from classes.models import classes
 from rest_framework.response import Response
 from rest_framework import status
+from .serializers import Give_AssignmentsSerializer,Submit_AssignmentsSerializer
 from rest_framework.decorators import api_view
 
 # Create your views here.
@@ -41,3 +42,16 @@ def submit_assignment(request,a_id,s_id):
         return Response ({"message":"Assignment submitted successfully"},status=status.HTTP_201_CREATED)
     except:
         return Response ({"message":"Assignment not submitted"},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def show_assignment(request,pk):
+    showassignment=Give_Assignments.objects.get(id=pk)
+    serializer = Give_AssignmentsSerializer(showassignment, many=False)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def show_all_assignment_given_by_teacher_in_specific_class(request,t_id,c_id):
+    showassignment=Give_Assignments.objects.filter(teacher=t_id,classes=c_id)
+    serializer = Give_AssignmentsSerializer(showassignment, many=True)
+    return Response(serializer.data)
+
