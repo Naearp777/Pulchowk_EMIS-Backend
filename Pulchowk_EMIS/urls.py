@@ -22,9 +22,19 @@ admin.site.site_title = "Pulchwok_EMIS"
 admin.site.index_title = "Welcome to Pulchwok_EMIS"
 
 urlpatterns = [
+    path('jet/', include('jet.urls', 'jet')),
+    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('admin/', admin.site.urls),
     path('', include("authentication.urls")),
     path('', include("customuser.urls")),
     path('', include("classes.urls")),
     path('', include("department.urls")),
+    path('', include("notice.urls")),
+    path('', include("batch.urls")),
+    path('', include("section.urls")),
+    path('', include("miscellaenous.urls")),
+    path('', include("student.urls")),
+    path('', include("teacher.urls")),
+    path('', include("assignments.urls")),
+    path('', include("class_materials.urls")),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

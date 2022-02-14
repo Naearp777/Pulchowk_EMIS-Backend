@@ -65,7 +65,7 @@ class User(AbstractBaseUser):
     department=models.BooleanField(
         default=False)  
     admin = models.BooleanField(default=False)      
-    
+    password_changed=models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []  # Email & Password are required by default.
