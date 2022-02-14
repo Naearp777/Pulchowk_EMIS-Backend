@@ -34,8 +34,8 @@ def create_assignment(request,c_id,t_id):
             publish_by=User.objects.get(id=t_id).first_name+" "+User.objects.get(id=t_id).last_name,
         )
         return Response ({"message":"Assignment created successfully"},status=status.HTTP_201_CREATED)
-    except:
-        return Response ({"message":"Assignment not created"},status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response ({"message": str(e) },status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
