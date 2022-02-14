@@ -71,6 +71,6 @@ def Department_delete(request,pk):
     try:
         deletedepartment=department.objects.get(id=pk)
         deletedepartment.delete()
-        return Response( {"message": "Department has been deleted."}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Department has been deleted sucessfully."}, status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         return Response( {"message" : str(e)} , status=status.HTTP_400_BAD_REQUEST)
