@@ -1,7 +1,9 @@
-from .models import Batch
-from rest_framework import serializers
+from rest_framework import  serializers
+
+from .models import batch
+
 
 class BatchSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Batch
+        model = batch
         fields = '__all__'

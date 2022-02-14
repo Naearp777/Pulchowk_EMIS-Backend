@@ -65,7 +65,7 @@ class User(AbstractBaseUser):
     department=models.BooleanField(
         default=False)  
     admin = models.BooleanField(default=False)      
-    
+    password_changed=models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []  # Email & Password are required by default.
@@ -99,6 +99,5 @@ class User(AbstractBaseUser):
     def is_admin(self):
 
         return self.admin
-
 class ExcelFileUpload(models.Model):
     excel_file = models.FileField(upload_to='excel') # a Model for recording the excel file
