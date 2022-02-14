@@ -89,12 +89,16 @@ def registerUser(request):
 class ExportUserCSV(APIView):
     
     def get(self , request):
-        users  = User.objects.all()
-        serializer = UserExportSerializer(users, many=True)
-        df  = pd.DataFrame(serializer.data)
-        df.to_csv('media/excel/export.csv', index=False)
-        # print(df)
-        return Response(serializer.data)
+        try:
+            
+            users  = User.objects.all()
+            serializer = UserExportSerializer(users, many=True)
+            df  = pd.DataFrame(serializer.data)
+            df.to_csv('media/excel/export.csv', index=False)
+            # print(df)
+            return Response(serializer.data , status=status.HTTP_200_OK)
+        except exceptions as e:
+            return Response(e , status=status.HTTP_400_BAD_REQUEST)
 @permission_classes([IsAuthenticated])
 class ImportUserCSV(APIView):
     def post(self,request):
@@ -149,9 +153,9 @@ class ImportUserCSV(APIView):
                 sign_up.send()
                 new_user.password=make_password(new_user.password)
                 new_user.save()
-            return Response(status=status.HTTP_201_CREATED)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response( { "message" : "User importted sucessfully!"} , status=status.HTTP_201_CREATED)
+        except exceptions as e:
+            return Response( {"message " : str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
