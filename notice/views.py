@@ -1,5 +1,6 @@
 from urllib import response
 from django.shortcuts import render
+from assignments import serializers
 
 from notice.serializers import NoticeSerializer
 from .models import notice
@@ -25,17 +26,20 @@ def createnotice_teacher(request,c_id):
       publish_by=data['publish_by']
       
     )
+
     return Response(status=status.HTTP_201_CREATED)
-  except:
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+  except Exception as e:
+    return Response( {"message" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def show_notice(request,c_id):
-  shownotice=notice.objects.filter(publish_to=c_id)
-  serializer = NoticeSerializer(shownotice, many=True)
-  return Response(serializer.data)
-
+  try:
+    shownotice=notice.objects.filter(publish_to=c_id)
+    serializer = NoticeSerializer(shownotice, many=True)
+    return Response(serializer.data , status  = status.HTTP_200_OK)
+  except Exception as e:
+    return Response( {"message" : str(e)}, status=status.HTTP_404_NOT_FOUND)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_globalnotice(request):
