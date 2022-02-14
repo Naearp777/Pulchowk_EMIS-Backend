@@ -1,0 +1,1 @@
+web: gunicorn Pulchowk_EMIS.wsgi --log-file -
