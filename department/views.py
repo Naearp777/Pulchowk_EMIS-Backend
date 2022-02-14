@@ -9,6 +9,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def createdepartment(request):
     data=request.data
     try:

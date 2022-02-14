@@ -6,8 +6,11 @@ from classes.models import classes
 from customuser.models import User
 from rest_framework.decorators import api_view
 from .serializers import MaterialsSerializer,FolderSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 # Create your views here.
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def upload_materials(request,f_id):
     data=request.data
     files  = request.FILES.getlist('files')
@@ -24,6 +27,7 @@ def upload_materials(request,f_id):
         return Response({"message":"Materials not uploaded"},status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_folder(request,c_id,t_id):
     data=request.data
     try:
@@ -40,6 +44,7 @@ def create_folder(request,c_id,t_id):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def update_folder(request,pk):
     data=request.data
     try:
@@ -52,6 +57,7 @@ def update_folder(request,pk):
         return Response({"message":"Folder not updated"},status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_folder(request,pk):
     try:
         folder.objects.filter(id=pk).delete()
@@ -60,6 +66,7 @@ def delete_folder(request,pk):
         return Response({"message":"Folder not deleted"},status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def show_folder(request,pk):
     try:
         folder_data=folder.objects.get(id=pk)
@@ -69,6 +76,7 @@ def show_folder(request,pk):
         return Response({"message":"Folder not found"},status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def show_all_folder_in_a_specific_class(request,c_id,t_id):
     try:
         folder_data=folder.objects.filter(classes=c_id,teacher=t_id)
