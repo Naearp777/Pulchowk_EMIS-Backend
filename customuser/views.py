@@ -103,9 +103,10 @@ class ExportUserCSV(APIView):
 class ImportUserCSV(APIView):
     def post(self,request):
         try:
-            excel_upload = ExcelFileUpload.objects.create()
-            excel_upload.excel_file = request.FILES.get('files')
-            df = pd.read_csv(f"{settings.BASE_DIR}/media/excel/{excel_upload.excel_file}")
+            excel_upload = ExcelFileUpload.objects.create(
+            excel_file = request.FILES.get('files')
+            )
+            df = pd.read_csv(f"{settings.BASE_DIR}/media/{excel_upload.excel_file}")
             print(df.values.tolist())
             for user in df.values.tolist() :
                 User.objects.create(
@@ -132,8 +133,8 @@ class ImportUserCSV(APIView):
                     student= User.objects.get(email=user[0]),
                     rollno=user[4],
                     department=department.objects.get(name=user[13]),
-                    batch=batch.objects.get(batch=user[14]),
-                    section=section.objects.get(section=user[15]),
+                    batch=batch.objects.get(name=user[14]),
+                    section=section.objects.get(name=user[15]),
                 )
                 if(serializer.data['staff']==True):
                     Teachers_info.objects.create(
