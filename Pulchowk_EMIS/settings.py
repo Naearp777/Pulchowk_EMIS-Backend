@@ -189,13 +189,7 @@ WSGI_APPLICATION = 'Pulchowk_EMIS.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
 
-#     'default': {
-
-#         'ENGINE': 'django.db.backends.postgresql',
-
-#         'NAME': 'Pulchowk_EMIS',
 
 
 
@@ -226,7 +220,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
@@ -263,7 +257,6 @@ CORS_ORIGIN_WHITELIST = (
 
 MEDIA_ROOT = (BASE_DIR / 'media')
 MEDIA_URL = '/media/'
-
 
 DATABASES = {
 
