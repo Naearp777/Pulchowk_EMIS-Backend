@@ -22,8 +22,3 @@ class Submit_AssignmentsSerializer(serializers.ModelSerializer):
         model =Submit_Assignments
         fields = '__all__'
 
-# class AssignmentsPostDueSerializer(serializers.ModelSerializer):
-    
-#     class Meta:
-#         model =AssignmentsPostDue
-#         fields =  '__all__'

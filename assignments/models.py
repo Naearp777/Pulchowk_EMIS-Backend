@@ -32,12 +32,3 @@ class Submit_Assignments(models.Model):
         
         verbose_name_plural = "Submissions"
         
-# class AssignmentsPostDue(models.Model):
-#     assignment=models.ForeignKey(Give_Assignments,on_delete=models.CASCADE)
-#     student=models.ForeignKey(User,on_delete=models.CASCADE)
-#     due_date  = models.ForeignKey(Give_Assignments,on_delete=models.CASCADE)
-#     def __str__(self):
-#         return self.student.first_name
-#     class Meta:
-#         ordering  = ('due_date',)
-#         verbose_name_plural = "Assignments Post Due"
