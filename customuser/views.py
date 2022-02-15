@@ -1,7 +1,7 @@
 from asyncio import exceptions
 from django import views
 from batch.models import batch
-from department.models import department
+from department.models import Departmentadmin_info, department
 from section.models import section
 from .serializers import UserSerializer,UserExportSerializer
 from .models import User,ExcelFileUpload
@@ -64,7 +64,11 @@ def registerUser(request):
                 teacher= User.objects.get(email=data['email']),
                 department=department.objects.get(name=data['department_name']),
             )
-
+        if(serializer.data['department']==True):
+            Departmentadmin_info.objects.create(
+                department_admin= User.objects.get(email=data['email']),
+                department=department.objects.get(name=data['department_name']),
+            )
         email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
                                            "password": serializer.data['password'], "email": serializer.data['email']})
         sign_up = EmailMultiAlternatives(
@@ -143,6 +147,11 @@ class ImportUserCSV(APIView):
                 if(serializer.data['staff'] == True):
                     Teachers_info.objects.create(
                         teacher=User.objects.get(email=user[0]),
+                        department=department.objects.get(name=user[9]),
+                    )
+                if(serializer.data['department'] == True):
+                    Departmentadmin_info.objects.create(
+                        departmentadmin=User.objects.get(email=user[0]),
                         department=department.objects.get(name=user[9]),
                     )
                 email_template = render_to_string('signup.html', {"first_name": serializer.data['first_name'],

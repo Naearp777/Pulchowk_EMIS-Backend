@@ -39,7 +39,7 @@ class StudentFilter(django_filters.FilterSet):
         fields = ['department','batch','section']
 
 
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class filter_student(ListAPIView):
     queryset = student_info.objects.all()
     serializer_class = StudentSerializer_search
@@ -53,7 +53,7 @@ class TeachertFilter(django_filters.FilterSet):
         fields = ['department']
 
 
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class filter_teacher(ListAPIView):
     queryset = Teachers_info.objects.all()
     serializer_class = TeacherSerialize_search
