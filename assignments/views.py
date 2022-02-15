@@ -5,7 +5,7 @@ from classes.models import classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
-from .serializers import  Give_AssignmentsSerializer,Submit_AssignmentsSerializer 
+from .serializers import  Give_AssignmentsSerializer,Submit_AssignmentsSerializer ,Calendar_Give_AssignmentsSerializer
 from rest_framework.decorators import api_view
 from notice.models import notice
 from rest_framework.permissions import IsAuthenticated
@@ -135,3 +135,22 @@ def show_all_post_due_assignments_for_a_student(request,c_id):
         return Response(serializer.data)
     except Exception as e:
         return Response( {"message": str(e)} , status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])  
+@permission_classes([IsAuthenticated])
+def calendar_view_for_student_for_month(request,c_id,month_id,year_id):
+    try:
+        show_post_due_assignments=Give_Assignments.objects.filter(classes=c_id,due_date__month=month_id,due_date__year=year_id)
+        serializer = Give_AssignmentsSerializer(show_post_due_assignments, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response( {"message": str(e)} , status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def show_all_assignments_for_all_class_given_to_specific_student(request,s_id):
+    showassignment=Give_Assignments.objects.filter(classes__student=s_id)
+    serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
+    return Response(serializer.data)
+    
+
