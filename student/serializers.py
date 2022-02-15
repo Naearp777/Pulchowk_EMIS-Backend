@@ -17,3 +17,8 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = student_info
         fields = '__all__'
+
+class StudentSerializer_search(serializers.ModelSerializer):
+    class Meta:
+        model = student_info
+        fields = '__all__'

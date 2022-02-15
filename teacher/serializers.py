@@ -10,4 +10,9 @@ class TeacherSerializer(serializers.ModelSerializer):
     department=DepartmentSerializer(read_only=True, many=False)
     class Meta:
         model = Teachers_info
+   
+   
+class TeacherSerialize_search(serializers.ModelSerializer):
+    class Meta:
+        model = Teachers_info
         fields = '__all__'
