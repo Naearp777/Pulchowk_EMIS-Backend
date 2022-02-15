@@ -11,6 +11,7 @@ from notice.models import notice
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime, timedelta
 
+from datetime import date
 from assignments import serializers
 # Create your views here.
 
@@ -123,13 +124,12 @@ def show_all_assignments_for_a_student(request,c_id):
     serializer = Give_AssignmentsSerializer(showassignment, many=True)
     return Response(serializer.data)
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def show_all_post_due_assignments_for_a_student(request,c_id):
     try:
             
-        print(datetime.now())
+        print(datetime.month())
         show_post_due_assignments=Give_Assignments.objects.filter(classes=c_id,due_date__lte=datetime.now())
         serializer = Give_AssignmentsSerializer(show_post_due_assignments, many=True)
         return Response(serializer.data)
