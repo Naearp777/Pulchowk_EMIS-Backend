@@ -2,7 +2,7 @@ from rest_framework import  serializers
 
 from customuser.serializers import UserSerializer_std
 
-from .models import Give_Assignments,Submit_Assignments
+from .models import  Give_Assignments,Submit_Assignments
 from classes.serializer import ClassSerializer
 
 
@@ -21,3 +21,4 @@ class Submit_AssignmentsSerializer(serializers.ModelSerializer):
     class Meta:
         model =Submit_Assignments
         fields = '__all__'
+

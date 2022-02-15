@@ -31,3 +31,4 @@ class Submit_Assignments(models.Model):
     class Meta:
         
         verbose_name_plural = "Submissions"
+        
