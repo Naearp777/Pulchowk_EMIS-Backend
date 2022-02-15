@@ -48,8 +48,8 @@ def submit_assignment(request,a_id,s_id):
         student_files=request.FILES.get('student_files'),
         )
         return Response ({"message":"Assignment submitted successfully"},status=status.HTTP_201_CREATED)
-    except:
-        return Response ({"message":"Assignment not submitted"},status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response ({"message": str(e) },status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -100,8 +100,8 @@ def update_assignment(request,pk):
         updateassignment.teacher_files=request.FILES.get('teacher_files')
         updateassignment.save()
         return Response ({"message":"Assignment updated successfully"},status=status.HTTP_201_CREATED)
-    except:
-        return Response ({"message":"Assignment not updated"},status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response ({"message": str(e) },status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -110,8 +110,8 @@ def delete_assignment(request,pk):
         deleteassignment=Give_Assignments.objects.get(id=pk)
         deleteassignment.delete()
         return Response ({"message":"Assignment deleted successfully"},status=status.HTTP_201_CREATED)
-    except:
-        return Response ({"message":"Assignment not deleted"},status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response ({"message": str(e) },status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
