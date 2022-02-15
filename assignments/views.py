@@ -1,14 +1,17 @@
 
-from assignments.models import Give_Assignments,Submit_Assignments
+from .models import  Give_Assignments,Submit_Assignments
 from customuser.models import User
 from classes.models import classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
-from .serializers import Give_AssignmentsSerializer,Submit_AssignmentsSerializer
+from .serializers import  Give_AssignmentsSerializer,Submit_AssignmentsSerializer 
 from rest_framework.decorators import api_view
 from notice.models import notice
 from rest_framework.permissions import IsAuthenticated
+from datetime import datetime, timedelta
+
+from assignments import serializers
 # Create your views here.
 
 @api_view(['POST'])
@@ -120,3 +123,15 @@ def show_all_assignments_for_a_student(request,s_id):
     serializer = Give_AssignmentsSerializer(showassignment, many=True)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def show_all_post_due_assignments_for_a_student(request,s_id):
+    try:
+            
+        print(datetime.now())
+        show_post_due_assignments=Give_Assignments.objects.filter(student=s_id,due_date=datetime.now())
+        serializer = Give_AssignmentsSerializer(show_post_due_assignments, many=True)
+        return Response(serializer.data)
+    except:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
