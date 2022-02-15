@@ -118,20 +118,20 @@ def delete_assignment(request,pk):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def show_all_assignments_for_a_student(request,s_id):
-    showassignment=Give_Assignments.objects.filter(student=s_id)
+def show_all_assignments_for_a_student(request,c_id):
+    showassignment=Give_Assignments.objects.filter(classes=c_id)
     serializer = Give_AssignmentsSerializer(showassignment, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def show_all_post_due_assignments_for_a_student(request,s_id):
+def show_all_post_due_assignments_for_a_student(request,c_id):
     try:
             
         print(datetime.now())
-        show_post_due_assignments=Give_Assignments.objects.filter(student=s_id,due_date=datetime.now())
+        show_post_due_assignments=Give_Assignments.objects.filter(classes=c_id,due_date__lte=datetime.now())
         serializer = Give_AssignmentsSerializer(show_post_due_assignments, many=True)
         return Response(serializer.data)
-    except:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response( {"message": str(e)} , status=status.HTTP_400_BAD_REQUEST)
