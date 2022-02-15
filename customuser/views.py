@@ -99,51 +99,54 @@ class ExportUserCSV(APIView):
             return Response(serializer.data , status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"message" : str(e)}  , status=status.HTTP_400_BAD_REQUEST)
+
 @permission_classes([IsAuthenticated])
 class ImportUserCSV(APIView):
-    def post(self,request):
+    def post(self, request):
         try:
-            excel_upload = ExcelFileUpload.objects.create(
-            excel_file = request.FILES.get('files')
-            )
-            df = pd.read_csv(f"{settings.BASE_DIR}/media/{excel_upload.excel_file}")
+            data = request.data
+            print(data, request.FILES.get('files'))
+            excel_upload = ExcelFileUpload.objects.create()
+            excel_upload.excel_file = request.FILES.get('files')
+            excel_upload.save()
+            df = pd.read_csv(
+                f"{settings.BASE_DIR}/media/{excel_upload.excel_file}")
             print(df.values.tolist())
-            for user in df.values.tolist() :
+            for user in df.values.tolist():
                 User.objects.create(
-                password    =get_random_string(length=7),
-                email       =user[0],
-                first_name  =user[1],
-                middle_name =user[2],
-                last_name   =user[3],
-                address     =user[5],
-                gender      =user[6],
-                phone       =user[7],
-                dob         =user[8],
-                student     =user[9],
-                staff       =user[10],
-                department  =user[11],
-                admin       =user[12],
-                password_changed=False,
+                    password=get_random_string(length=7),
+                    email=user[0],
+                    first_name=user[1],
+                    middle_name=user[2],
+                    last_name=user[3],
+                    address=user[5],
+                    gender=user[6],
+                    phone=user[7],
+                    dob=user[8],
+                    student=data['student'],
+                    staff=data['staff'],
+                    department=data['department'],
+                    admin=data['admin'],
+                    password_changed=False,
                 )
                 new_user = User.objects.get(email=user[0])
                 serializer = UserSerializer(new_user, many=False)
-                
-                if(serializer.data['student']==True):
+
+                if(serializer.data['student'] == True):
                     student_info.objects.create(
-                    student= User.objects.get(email=user[0]),
-                    rollno=user[4],
-                    department=department.objects.get(name=user[13]),
-                    batch=batch.objects.get(name=user[14]),
-                    section=section.objects.get(name=user[15]),
-                )
-                if(serializer.data['staff']==True):
+                        student=User.objects.get(email=user[0]),
+                        rollno=user[4],
+                        department=department.objects.get(name=user[9]),
+                        batch=batch.objects.get(name=user[10]),
+                        section=section.objects.get(name=user[11]),
+                    )
+                if(serializer.data['staff'] == True):
                     Teachers_info.objects.create(
-                    teacher= User.objects.get(email=user[0]),
-                    department=department.objects.get(name=user[13]),
-                
-                )
-                email_template = render_to_string('signup.html', {"first_name":serializer.data['first_name'],
-                                                "password": serializer.data['password'], "email": serializer.data['email']})
+                        teacher=User.objects.get(email=user[0]),
+                        department=department.objects.get(name=user[9]),
+                    )
+                email_template = render_to_string('signup.html', {"first_name": serializer.data['first_name'],
+                                                                  "password": serializer.data['password'], "email": serializer.data['email']})
                 sign_up = EmailMultiAlternatives(
                     "Account has been Created",
                     "Account has been Created",
@@ -152,11 +155,11 @@ class ImportUserCSV(APIView):
                 )
                 sign_up.attach_alternative(email_template, 'text/html')
                 sign_up.send()
-                new_user.password=make_password(new_user.password)
+                new_user.password = make_password(new_user.password)
                 new_user.save()
-            return Response( { "message" : "User importted sucessfully!"} , status=status.HTTP_201_CREATED)
+            return Response({"message": "User importted sucessfully!"}, status=status.HTTP_201_CREATED)
         except Exception as e:
-            return Response( {"message " : str(e)} , status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message ": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
