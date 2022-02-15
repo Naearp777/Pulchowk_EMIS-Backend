@@ -8,7 +8,7 @@ class notice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     files=models.FileField(upload_to='notice/files/',blank=True)
     publish_to=models.ForeignKey(classes,on_delete=models.CASCADE)
-    publish_by=models.CharField(max_length=100)
+    publish_by=models.CharField(max_length=100,null=True,blank=True)
     def __str__(self):
         return f'{self.title}'
     

@@ -1,4 +1,5 @@
 
+from notification.models import Notification
 from .models import  Give_Assignments,Submit_Assignments
 from customuser.models import User
 from classes.models import classes
@@ -35,8 +36,18 @@ def create_assignment(request,c_id,t_id):
             content=data['description'],
             created_at=data['created_at'],
             publish_to=classes.objects.get(id=c_id),
-            publish_by=User.objects.get(id=t_id).first_name+" "+User.objects.get(id=t_id).last_name,
+            publish_by=str(User.objects.get(id=t_id).first_name)+" "+str(User.objects.get(id=t_id).last_name),
         )
+        temp_list=len(classes.objects.get(id=c_id).student.all())
+        for i in range(temp_list):
+            Notification.objects.create(
+                title=data['title'],
+                content=data['description'],
+                created_at=data['created_at'],
+                #publish to all students in the class in a list
+                publish_to=(User.objects.get(id=classes.objects.get(id=c_id).student.all()[i].id)),
+                publish_by=str(User.objects.get(id=t_id).first_name)+" "+str(User.objects.get(id=t_id).last_name),
+            )
         return Response ({"message":"Assignment created successfully"},status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response ({"message": str(e) },status=status.HTTP_400_BAD_REQUEST)

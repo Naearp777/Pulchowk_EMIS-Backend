@@ -61,6 +61,9 @@ INSTALLED_APPS = [
     'student.apps.StudentConfig',
     'assignments.apps.AssignmentsConfig',
     'cloudinary',
+    'django_filters',
+    'notification.apps.NotificationConfig',
+
 
 
 ]
