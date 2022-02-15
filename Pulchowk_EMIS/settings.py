@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'corsheaders',
+    'rest_framework',
     'authentication.apps.AuthenticationConfig',
     'django_rest_passwordreset',
     'customuser.apps.CustomuserConfig',
@@ -189,25 +189,14 @@ WSGI_APPLICATION = 'Pulchowk_EMIS.wsgi.application'
 #     }
 # }
 
-DATABASES = {
+# DATABASES = {
 
-    'default': {
+#     'default': {
 
-        'ENGINE': 'django.db.backends.postgresql',
+#         'ENGINE': 'django.db.backends.postgresql',
 
-        'NAME': 'Pulchowk_EMIS',
+#         'NAME': 'Pulchowk_EMIS',
 
-        'USER': 'postgres',
-
-        'PASSWORD': 'admin',
-
-        'HOST': 'localhost',
-
-        'PORT': '5432',
-
-    }
-
-}
 
 
 # db_from_env = dj_database_url.config(conn_max_age=600)
@@ -237,7 +226,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kathmandu'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -275,6 +264,26 @@ CORS_ORIGIN_WHITELIST = (
 MEDIA_ROOT = (BASE_DIR / 'media')
 MEDIA_URL = '/media/'
 
+
+DATABASES = {
+
+    'default': {
+
+        'ENGINE': 'django.db.backends.postgresql',
+
+        'NAME': 'Pulchowk_EMIS',
+
+        'USER': 'postgres',
+
+        'PASSWORD': 'admin',
+
+        'HOST': 'localhost',
+
+        'PORT': '5432',
+
+    }
+
+}
 
 # CLOUDINARY_STORAGE = {
 #     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
