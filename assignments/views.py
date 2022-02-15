@@ -154,3 +154,9 @@ def show_all_assignments_for_all_class_given_to_specific_student(request,s_id):
     return Response(serializer.data)
     
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def show_all_assignments_for_all_class_given_to_specific_student_in_a_month(request,s_id,month_id,year_id):
+    showassignment=Give_Assignments.objects.filter(classes__student=s_id,due_date__month=month_id,due_date__year=year_id)
+    serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
+    return Response(serializer.data)

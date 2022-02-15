@@ -13,8 +13,7 @@ urlpatterns = [
     path('api/assignment/delete/<int:pk>/', views.delete_assignment, name='delete_assignment'),
     path('api/assignment/show/postdue/<int:c_id>/' , views.show_all_post_due_assignments_for_a_student, name='show_all_post_due_assignments_for_a_student'),
     path('api/assignment/show/calendar/<int:c_id>/<int:month_id>/<int:year_id>/',views.calendar_view_for_student_for_month, name='calendar_view_for_student_for_month'),
-    path('api/assignment/show/all/class/specific/sudent/<int:s_id>/',views.show_all_assignments_for_all_class_given_to_specific_student, name='show_all_assignments_for_all_class_given_to_specific_student'),
-
+    path('api/assignment/show/all/class/specific/student/<int:s_id>/',views.show_all_assignments_for_all_class_given_to_specific_student, name='show_all_assignments_for_all_class_given_to_specific_student'),
+    path('api/assignment/show/all/class/specific/student/<int:s_id>/<int:month_id>/<int:year_id>/',views.show_all_assignments_for_all_class_given_to_specific_student_in_a_month, name='show_all_assignments_for_all_class_given_to_specific_student_for_month'),
     
-
 ]
