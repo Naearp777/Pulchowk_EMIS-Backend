@@ -195,7 +195,7 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql',
 
-        'NAME': 'Pulchowk-EMIS',
+        'NAME': 'Pulchowk_EMIS',
 
         'USER': 'postgres',
 
@@ -237,7 +237,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'AISA/Kathmandu'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
