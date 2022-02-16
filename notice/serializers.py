@@ -11,6 +11,8 @@ class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = notice
         fields = "__all__"
+        
+        
 
 
 class GlobalNoticeSerializer(serializers.ModelSerializer):
@@ -19,3 +21,4 @@ class GlobalNoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = global_notice
         fields = "__all__"
+        

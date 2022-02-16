@@ -95,6 +95,12 @@ def show_all_assignment_given_by_teacher_in_specific_class(request, t_id, c_id):
     serializer = Give_AssignmentsSerializer(showassignment, many=True)
     return Response(serializer.data)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_all_assignment_in_specific_class(request, c_id):
+    showassignment = Give_Assignments.objects.filter(classes=c_id)
+    serializer = Give_AssignmentsSerializer(showassignment, many=True)
+    return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

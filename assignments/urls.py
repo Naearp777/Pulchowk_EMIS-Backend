@@ -16,6 +16,9 @@ urlpatterns = [
         "api/assignment/show/<int:pk>/", views.show_assignment, name="show_assignment"
     ),
     path(
+        "api/assignment/show/all/<int:c_id>/", views.show_all_assignment_in_specific_class, name="show_all_assignments_in_specific_class"
+    ),
+    path(
         "api/assignment/show/all/<int:t_id>/<int:c_id>/",
         views.show_all_assignment_given_by_teacher_in_specific_class,
         name="show_all_assignment_given_by_teacher_in_specific_class",

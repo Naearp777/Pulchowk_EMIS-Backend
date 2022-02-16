@@ -49,7 +49,7 @@ def createnotice_teacher(request, c_id, t_id):
 @permission_classes([IsAuthenticated])
 def show_notice(request, c_id):
     try:
-        shownotice = notice.objects.filter(publish_to=c_id)
+        shownotice = notice.objects.filter(publish_to=c_id).order_by('-created_at')
         serializer = NoticeSerializer(shownotice, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
