@@ -29,14 +29,11 @@ def create_assignment(request, c_id, t_id):
             title=data["title"],
             description=data["description"],
             due_date=data["due_date"],
-            created_at=data["created_at"],
-            updated_at=data["updated_at"],
             teacher_files=request.FILES.get("teacher_files"),
         )
         notice.objects.create(
             title=data["title"],
             content=data["description"],
-            created_at=data["created_at"],
             publish_to=classes.objects.get(id=c_id),
             publish_by=str(User.objects.get(id=t_id).first_name)
             + " "
@@ -47,7 +44,6 @@ def create_assignment(request, c_id, t_id):
             Notification.objects.create(
                 title=data["title"],
                 content=data["description"],
-                created_at=data["created_at"],
                 # publish to all students in the class in a list
                 publish_to=(
                     User.objects.get(
@@ -135,8 +131,6 @@ def update_assignment(request, pk):
         updateassignment.title = data["title"]
         updateassignment.description = data["description"]
         updateassignment.due_date = data["due_date"]
-        updateassignment.created_at = data["created_at"]
-        updateassignment.updated_at = data["updated_at"]
         updateassignment.teacher_files = request.FILES.get("teacher_files")
         updateassignment.save()
         return Response(

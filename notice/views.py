@@ -30,7 +30,6 @@ def createnotice_teacher(request, c_id, t_id):
             Notification.objects.create(
                 title=data["title"],
                 content=data["content"],
-                created_at=data["created_at"],
                 # publish to all students in the class in a list
                 publish_to=(
                     User.objects.get(
