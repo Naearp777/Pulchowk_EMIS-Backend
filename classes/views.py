@@ -34,10 +34,11 @@ def create_class(request):
         
         
         serializer = ClassSerializer(newclass, many=False)
-        print(serializer.data)
-        return Response(serializer.data)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    except Exception as e:
+        return Response({"message":str(e)},status=status.HTTP_400_BAD_REQUEST)
+       
 
 
 
@@ -88,8 +89,9 @@ def update_class(request,pk):
             student=data['s_id'],
         )
         return Response({"message":"Class updated successfully"},status=status.HTTP_201_CREATED)
-    except:
-        return Response({"message":"Class not updated"},status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response( {"message" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -97,7 +99,8 @@ def delete_class(request,pk):
     try:
         classes.objects.filter(id=pk).delete()
         return Response({"message":"Class deleted successfully"},status=status.HTTP_201_CREATED)
-    except:
-        return Response({"message":"Class not deleted"},status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response( {"message" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+       
 
 
