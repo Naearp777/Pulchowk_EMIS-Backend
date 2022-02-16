@@ -9,6 +9,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
+from department.models import Departmentadmin_info
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -49,7 +50,17 @@ def get_self_role(request):
     else:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_self_department(request):
+    data = request.data
+    access_token_object = AccessToken(data['access'])
+    user_id = access_token_object['user_id']
+    user = User.objects.get(id=user_id)
 
+    if (user.department):
+        dept = Departmentadmin_info.objects.get(dept_admin=user.id)
+        return Response(dept.department.name, status=status.HTTP_200_OK)
 @permission_classes([IsAuthenticated])
 class LogoutView(APIView):
     def post(self, request):

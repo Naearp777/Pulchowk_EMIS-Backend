@@ -19,39 +19,33 @@ def create_class(request):
     data = request.data
     print(data)
     try:
-        temp_list = len(
-            classes.objects.get(
-                student_info.objects.filter(
-                    department=department.objects.get(id=data["department_id"]),
-                    batch=batch.objects.get(id=data["batch_id"]),
-                    section=section.objects.get(id=data["section_id"]),
-                ).all()
-            )
+        newclass = classes.objects.create(
+            name=data["class_name"],
+            alias=data["alias"],
+            department=department.objects.get(name=data["department"]),
         )
-        for i in range(temp_list):
-            newclass = classes.objects.create(
-                name=data["class_name"],
-                student=User.objects.get(
-                    id=student_info.objects.filter(
-                        department=department.objects.get(id=data["department_id"]),
-                        batch=batch.objects.get(id=data["batch_id"]),
-                        section=section.objects.get(id=data["section_id"]),
-                    )
-                    .all()[i]
-                    .id
-                ),
-            )
-            showclass = classes.objects.get(name=data["class_name"])
+        showclass = classes.objects.get(id=newclass.id)
 
         print(data["t_id"])
-        for t in data["t_id"].split(","):
+        for t in data["t_id"]:
+            print(t)
             t = User.objects.get(id=t)
             showclass.teacher.add(t)
             showclass.save()
 
-        serializer = ClassSerializer(newclass, many=False)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        for s in student_info.objects.filter(
+            department=department.objects.get(name=data["department"]),
+            batch=batch.objects.get(name=data["batch"]),
+            section=section.objects.get(name=data["section"]),
+        ):
+            print("s", s.student.id)
+            s = User.objects.get(id=s.student.id)
+            showclass.student.add(s)
+            showclass.save()
 
+        serializer = ClassSerializer(newclass, many=False)
+        print(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
