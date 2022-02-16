@@ -1,5 +1,9 @@
+from batch.models import batch
 from classes.models import classes
 from customuser.models import User
+from department.models import department
+from section.models import section
+from student.models import student_info
 from .serializer import ClassSerializer
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,10 +17,13 @@ def create_class(request):
     data = request.data
     print(data)
     try:
-        newclass = classes.objects.create(
-            name=data['class_name'],
-        )
-        showclass=classes.objects.get(name=data['class_name'])
+        temp_list=len(classes.objects.get(student_info.objects.filter(department=department.objects.get(id=data['department_id']),batch=batch.objects.get(id=data['batch_id']),section=section.objects.get(id=data['section_id'])).all()))
+        for i in range(temp_list):
+            newclass = classes.objects.create(
+                name=data['class_name'],
+                student=User.objects.get(id=student_info.objects.filter(department=department.objects.get(id=data['department_id']),batch=batch.objects.get(id=data['batch_id']),section=section.objects.get(id=data['section_id'])).all()[i].id),
+            )
+            showclass=classes.objects.get(name=data['class_name'])
       
         print(data['t_id'])
         for t in data['t_id'].split(","):
@@ -24,12 +31,6 @@ def create_class(request):
             showclass.teacher.add(t)
             showclass.save()
 
-        for s in data['s_id'].split(","):
-            s = User.objects.get(id=s)
-            showclass.student.add(s)
-            showclass.save()
-
-        
         
         serializer = ClassSerializer(newclass, many=False)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
