@@ -10,10 +10,7 @@ from .serializers import  Give_AssignmentsSerializer,Submit_AssignmentsSerialize
 from rest_framework.decorators import api_view
 from notice.models import notice
 from rest_framework.permissions import IsAuthenticated
-from datetime import datetime, timedelta
-
-from datetime import date
-from assignments import serializers
+from datetime import datetime
 # Create your views here.
 
 @api_view(['POST'])

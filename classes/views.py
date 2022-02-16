@@ -1,5 +1,3 @@
-from re import A
-from django.shortcuts import render
 from classes.models import classes
 from customuser.models import User
 from .serializer import ClassSerializer

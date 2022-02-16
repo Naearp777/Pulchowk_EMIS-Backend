@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from customuser.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework.response import Response

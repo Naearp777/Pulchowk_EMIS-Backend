@@ -1,6 +1,3 @@
-from urllib import response
-from django.shortcuts import render
-from customuser.models import User
 from student.models import student_info
 from .serializers import StudentSerializer
 from rest_framework.decorators import api_view,permission_classes

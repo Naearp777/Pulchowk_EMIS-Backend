@@ -1,5 +1,3 @@
-from asyncio import exceptions
-from django import views
 from batch.models import batch
 from department.models import Departmentadmin_info, department
 from section.models import section

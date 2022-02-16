@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from .models import department
 from .serializers import DepartmentSerializer
 from rest_framework.response import Response

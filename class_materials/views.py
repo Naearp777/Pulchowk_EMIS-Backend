@@ -1,11 +1,10 @@
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from class_materials.models import materials,folder
 from classes.models import classes
 from customuser.models import User
 from rest_framework.decorators import api_view
-from .serializers import MaterialsSerializer,FolderSerializer
+from .serializers import FolderSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 # Create your views here.

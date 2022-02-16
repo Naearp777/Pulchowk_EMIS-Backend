@@ -1,7 +1,3 @@
-from urllib import response
-from django.shortcuts import render
-from assignments import serializers
-
 from notice.serializers import NoticeSerializer,GlobalNoticeSerializer
 from .models import notice,global_notice
 from classes.models import classes
