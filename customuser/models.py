@@ -1,7 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
-)
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 
 class UserManager(BaseUserManager):
@@ -10,7 +8,7 @@ class UserManager(BaseUserManager):
         Creates and saves a User with the given email and password.
         """
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
 
         user = self.model(
             email=self.normalize_email(email),
@@ -48,7 +46,10 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(
-        verbose_name='email address', max_length=255, unique=True,)
+        verbose_name="email address",
+        max_length=255,
+        unique=True,
+    )
     first_name = models.CharField(max_length=255, null=True)
     middle_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
@@ -56,18 +57,15 @@ class User(AbstractBaseUser):
     address = models.CharField(max_length=255, null=True)
     gender = models.CharField(max_length=100, null=True)
     phone = models.CharField(null=True, max_length=20)
-    dob=models.CharField(null=True,blank=True,max_length=20)
-    images = models.ImageField(
-        default='avatar.jpg', upload_to='profile_Images')
+    dob = models.CharField(null=True, blank=True, max_length=20)
+    images = models.ImageField(default="avatar.jpg", upload_to="profile_Images")
     student = models.BooleanField(default=True)
-    staff = models.BooleanField(
-        default=False)
-    department=models.BooleanField(
-        default=False)  
-    admin = models.BooleanField(default=False)      
-    password_changed=models.BooleanField(default=False)
+    staff = models.BooleanField(default=False)
+    department = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False)
+    password_changed = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []  # Email & Password are required by default.
     objects = UserManager()
 
@@ -99,5 +97,9 @@ class User(AbstractBaseUser):
     def is_admin(self):
 
         return self.admin
+
+
 class ExcelFileUpload(models.Model):
-    excel_file = models.FileField(upload_to='excel') # a Model for recording the excel file
+    excel_file = models.FileField(
+        upload_to="excel"
+    )  # a Model for recording the excel file

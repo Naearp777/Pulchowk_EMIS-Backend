@@ -1,7 +1,6 @@
 from django.urls import path
-from .import views
-urlpatterns = [
+from . import views
 
-    path('api/show/all_students/', views.show_all_students, name='show_all_students'),
-    
+urlpatterns = [
+    path("api/show/all_students/", views.show_all_students, name="show_all_students"),
 ]
