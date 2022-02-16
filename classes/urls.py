@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path("api/create/class/", views.create_class, name="create_class"),
-    path("api/show/<int:pk>/", views.show_class, name="show_class"),
+    path("api/show/class/<int:pk>/", views.show_class, name="show_class"),
     path("api/show/class/all/", views.show_all_class, name="show_all_class"),
     path(
         "api/show/class/by/teacher/<int:pk>/",
