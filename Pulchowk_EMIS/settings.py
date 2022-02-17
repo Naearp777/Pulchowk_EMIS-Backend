@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django_filters",
     "notification.apps.NotificationConfig",
     "chat.apps.ChatConfig",
+    "assessment.apps.AssessmentConfig",
 ]
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],

@@ -20,6 +20,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer_search(serializers.ModelSerializer):
+    student=UserSerializer_std(read_only=True, many=False)
     class Meta:
         model = student_info
         fields = "__all__"
