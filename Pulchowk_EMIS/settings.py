@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "cloudinary",
     "django_filters",
     "notification.apps.NotificationConfig",
+    "chat.apps.ChatConfig",
 ]
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
