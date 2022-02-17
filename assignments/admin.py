@@ -9,7 +9,7 @@ class Give_AssignmentsAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Assignment Info",
-            {"fields": ("title", "description", "teacher_files", "due_date")},
+            {"fields": ("title", "description", "total_points", "teacher_files", "due_date")},
         ),
         ("Related Users", {"fields": ("classes", "teacher")}),
     )

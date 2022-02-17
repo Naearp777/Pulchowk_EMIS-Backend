@@ -10,7 +10,7 @@ class notice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     files = models.FileField(upload_to="notice/files/", blank=True)
     publish_to = models.ForeignKey(classes, on_delete=models.CASCADE)
-    publish_by = models.CharField(max_length=100, null=True, blank=True)
+    publish_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.title}"
@@ -18,13 +18,12 @@ class notice(models.Model):
     class Meta:
         verbose_name_plural = "Notices"
 class Assignmentnotice(models.Model):
-    assignmment=models.ForeignKey(Give_Assignments, on_delete=models.CASCADE)
+    assignment=models.ForeignKey(Give_Assignments, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    files = models.FileField(upload_to="notice/files/", blank=True)
     publish_to = models.ForeignKey(classes, on_delete=models.CASCADE)
-    publish_by = models.CharField(max_length=100, null=True, blank=True)
+    publish_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.title}"
@@ -39,7 +38,7 @@ class global_notice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     files = models.FileField(upload_to="notice/files/", blank=True)
     publish_to = models.ForeignKey(User, on_delete=models.CASCADE)
-    publish_by = models.CharField(max_length=100)
+    publish_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publish_by")
 
     def __str__(self):
         return f"{self.title}"

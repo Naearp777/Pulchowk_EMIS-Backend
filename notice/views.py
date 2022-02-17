@@ -1,4 +1,4 @@
-from notice.serializers import NoticeSerializer, GlobalNoticeSerializer
+from notice.serializers import AssignmentNoticeSerializer, NoticeSerializer, GlobalNoticeSerializer
 from .models import Assignmentnotice, notice, global_notice
 from classes.models import classes
 from rest_framework.decorators import api_view, permission_classes
@@ -21,9 +21,7 @@ def createnotice_teacher(request, c_id, t_id):
             content=data["content"],
             files=request.FILES.get("files"),
             publish_to=classes.objects.get(id=c_id),
-            publish_by=str(User.objects.get(id=t_id).first_name)
-            + " "
-            + str(User.objects.get(id=t_id).last_name),
+            publish_by=User.objects.get(id=t_id),
         )
         temp_list = len(classes.objects.get(id=c_id).student.all())
         for i in range(temp_list):
@@ -52,7 +50,7 @@ def show_notice(request, c_id):
         shownotice = notice.objects.filter(publish_to=c_id).order_by('-created_at')
         showassigmentnotice=Assignmentnotice.objects.filter(publish_to=c_id).order_by('-created_at')
         noticeserializer = NoticeSerializer(shownotice, many=True)
-        assigmentnoticeserializer = GlobalNoticeSerializer(showassigmentnotice, many=True)
+        assigmentnoticeserializer = AssignmentNoticeSerializer(showassigmentnotice, many=True)
         return Response(
             {
                 "notice": noticeserializer.data,

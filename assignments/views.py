@@ -23,7 +23,7 @@ from datetime import datetime
 def create_assignment(request, c_id, t_id):
     data = request.data
     try:
-        Give_Assignments.objects.create(
+        assignment = Give_Assignments.objects.create(
             classes=classes.objects.get(id=c_id),
             teacher=User.objects.get(id=t_id),
             title=data["title"],
@@ -33,13 +33,11 @@ def create_assignment(request, c_id, t_id):
             teacher_files=request.FILES.get("teacher_files"),
         )
         Assignmentnotice.objects.create(
-            assignment=Give_Assignments.objects.get(title=data["title"]),
+            assignment=Give_Assignments.objects.get(id = assignment.id),
             title=data["title"],
             content=data["description"],
             publish_to=classes.objects.get(id=c_id),
-            publish_by=str(User.objects.get(id=t_id).first_name)
-            + " "
-            + str(User.objects.get(id=t_id).last_name),
+            publish_by=User.objects.get(id=t_id),
         )
         temp_list = len(classes.objects.get(id=c_id).student.all())
         for i in range(temp_list):
@@ -52,9 +50,8 @@ def create_assignment(request, c_id, t_id):
                         id=classes.objects.get(id=c_id).student.all()[i].id
                     )
                 ),
-                publish_by=str(User.objects.get(id=t_id).first_name)
-                + " "
-                + str(User.objects.get(id=t_id).last_name),
+                publish_by=User.objects.get(id=t_id)
+                
             )
         return Response(
             {"message": "Assignment created successfully"},
