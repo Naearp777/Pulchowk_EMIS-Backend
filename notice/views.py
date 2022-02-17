@@ -1,5 +1,5 @@
 from notice.serializers import NoticeSerializer, GlobalNoticeSerializer
-from .models import notice, global_notice
+from .models import Assignmentnotice, notice, global_notice
 from classes.models import classes
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -50,8 +50,15 @@ def createnotice_teacher(request, c_id, t_id):
 def show_notice(request, c_id):
     try:
         shownotice = notice.objects.filter(publish_to=c_id).order_by('-created_at')
-        serializer = NoticeSerializer(shownotice, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        showassigmentnotice=Assignmentnotice.objects.filter(publish_to=c_id).order_by('-created_at')
+        noticeserializer = NoticeSerializer(shownotice, many=True)
+        assigmentnoticeserializer = GlobalNoticeSerializer(showassigmentnotice, many=True)
+        return Response(
+            {
+                "notice": noticeserializer.data,
+                "assignmentnotice": assigmentnoticeserializer.data,
+            },status=status.HTTP_200_OK
+        )
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
 

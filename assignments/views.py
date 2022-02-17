@@ -11,7 +11,7 @@ from .serializers import (
     Calendar_Give_AssignmentsSerializer,
 )
 from rest_framework.decorators import api_view
-from notice.models import notice
+from notice.models import Assignmentnotice
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
 
@@ -31,7 +31,8 @@ def create_assignment(request, c_id, t_id):
             due_date=data["due_date"],
             teacher_files=request.FILES.get("teacher_files"),
         )
-        notice.objects.create(
+        Assignmentnotice.objects.create(
+            assignment=Give_Assignments.objects.get(title=data["title"]),
             title=data["title"],
             content=data["description"],
             publish_to=classes.objects.get(id=c_id),
