@@ -26,7 +26,6 @@ def sendMessage(request,sender,receiver):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getMessage(request,sender,receiver):
-    data = request.data
     sender = User.objects.get(id=sender)
     receiver = User.objects.get(id=receiver)
     message=Messages.objects.filter( 
@@ -40,7 +39,6 @@ def getMessage(request,sender,receiver):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getMessageBySender(request,sender):
-    data = request.data
     sender = User.objects.get(id=sender)
     message = Messages.objects.filter(
         sender=sender,
@@ -51,7 +49,6 @@ def getMessageBySender(request,sender):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getMessageByReceiver(request,receiver):
-    data = request.data
     receiver = User.objects.get(id=receiver)
     message = Messages.objects.filter(
         receiver=receiver,
