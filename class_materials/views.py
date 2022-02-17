@@ -19,8 +19,7 @@ def upload_materials(request, f_id):
             materials.objects.create(
                 folder=folder.objects.get(id=f_id),
                 file=file,
-                created_at=data["created_at"],
-                updated_at=data["updated_at"],
+                
             )
         return Response(
             {"message": "Materials uploaded successfully"},
@@ -40,8 +39,6 @@ def create_folder(request, c_id, t_id):
         folder.objects.create(
             classes=classes.objects.get(id=c_id),
             folder_name=data["folder_name"],
-            created_at=data["created_at"],
-            updated_at=data["updated_at"],
             teacher=User.objects.get(id=t_id),
         )
         return Response(
@@ -100,9 +97,9 @@ def show_folder(request, pk):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def show_all_folder_in_a_specific_class(request, c_id, t_id):
+def show_all_folder_in_a_specific_class(request, c_id):
     try:
-        folder_data = folder.objects.filter(classes=c_id, teacher=t_id)
+        folder_data = folder.objects.filter(classes=c_id)
         serializer = FolderSerializer(folder_data, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except:

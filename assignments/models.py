@@ -11,7 +11,7 @@ class Give_Assignments(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    due_date = models.DateField(blank=True, null=True)
+    due_date = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     total_points=models.IntegerField(default=0)
@@ -21,7 +21,7 @@ class Give_Assignments(models.Model):
         return self.title
 
     class Meta:
-        ordering = ("created_at",)
+        ordering = ("-created_at",)
         verbose_name_plural = "Assignments"
 
 
