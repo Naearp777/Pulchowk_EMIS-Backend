@@ -29,6 +29,7 @@ def create_assignment(request, c_id, t_id):
             title=data["title"],
             description=data["description"],
             due_date=data["due_date"],
+            total_points=data["total_points"],
             teacher_files=request.FILES.get("teacher_files"),
         )
         Assignmentnotice.objects.create(
@@ -71,6 +72,7 @@ def submit_assignment(request, a_id, s_id):
         Submit_Assignments.objects.create(
             student=User.objects.get(id=s_id),
             assignment=Give_Assignments.objects.get(id=a_id),
+            obtain_points=data["obtain_points"],
             student_files=request.FILES.get("student_files"),
         )
         return Response(
@@ -139,6 +141,7 @@ def update_assignment(request, pk):
         updateassignment.description = data["description"]
         updateassignment.due_date = data["due_date"]
         updateassignment.teacher_files = request.FILES.get("teacher_files")
+        updateassignment.obtain_points = data["obtain_points"]
         updateassignment.save()
         return Response(
             {"message": "Assignment updated successfully"},
