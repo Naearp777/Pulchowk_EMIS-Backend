@@ -4,9 +4,11 @@ from class_materials.models import materials, folder
 from classes.models import classes
 from customuser.models import User
 from rest_framework.decorators import api_view
-from .serializers import FolderSerializer
+from .serializers import FolderSerializer, MaterialsSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+
+from class_materials import serializers
 
 # Create your views here.
 @api_view(["POST"])
@@ -93,6 +95,14 @@ def show_folder(request, pk):
         return Response(
             {"message": "Folder not found"}, status=status.HTTP_404_NOT_FOUND
         )
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_materials_in_a_folder(request, f_id):
+    material = materials.objects.filter(folder=f_id)
+    serializer = MaterialsSerializer(material, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 
 @api_view(["GET"])

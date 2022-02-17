@@ -20,4 +20,5 @@ urlpatterns = [
         views.show_all_folder_in_a_specific_class,
         name="show_all_folder_given__in_specific_class",
     ),
+    path('api/show/all/materials/<int:f_id>/', views.show_materials_in_a_folder, name='show_all_materials_in_a_folder'),
 ]
