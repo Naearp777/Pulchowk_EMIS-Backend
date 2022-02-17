@@ -247,7 +247,7 @@ MEDIA_URL = "/media/"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "pulchowk_emis",
+        "NAME": "Pulchowk_EMIS",
         "USER": "postgres",
         "PASSWORD": "admin",
         "HOST": "localhost",
