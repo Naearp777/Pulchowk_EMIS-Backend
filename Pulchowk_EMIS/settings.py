@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "notification.apps.NotificationConfig",
     "chat.apps.ChatConfig",
     "assessment.apps.AssessmentConfig",
+    "attendance.apps.AttendanceConfig",
 ]
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
@@ -249,7 +250,7 @@ MEDIA_URL = "/media/"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "Pulchowk_EMIS",
+        "NAME": "pulchowk_emis",
         "USER": "postgres",
         "PASSWORD": "admin",
         "HOST": "localhost",
