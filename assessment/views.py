@@ -1,15 +1,12 @@
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 import pandas as pd
-from rest_framework.views import APIView
 from department.models import department
 from student.models import student_info
 from .models import Assessment
 from classes.models import classes
-from customuser.models import User
 from customuser.models import ExcelFileUpload
 from django.conf import settings
 from .serializers import AssessmentSerializer, StudentSerializer_export
@@ -57,6 +54,7 @@ def Export_Student_Class_list(request, d_id):
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @permission_classes([IsAuthenticated])
 @api_view(["GET"])
 def get_assessment_list(request, c_id):
@@ -64,5 +62,27 @@ def get_assessment_list(request, c_id):
         users = Assessment.objects.filter(classes=classes.objects.get(id=c_id))
         serializer = AssessmentSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes([IsAuthenticated])
+@api_view(["DELETE"])
+def delete_assessment(request, c_id):
+    try:
+        users = Assessment.objects.filter(classes=classes.objects.get(id=c_id))
+        users.delete()
+        return Response(status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes([IsAuthenticated])
+@api_view(["DELETE"])
+def delete_assessment_by_id(request, a_id):
+    try:
+        users = Assessment.objects.get(id=a_id)
+        users.delete()
+        return Response(status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)

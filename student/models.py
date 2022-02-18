@@ -11,6 +11,7 @@ class student_info(models.Model):
     department = models.ForeignKey(department, on_delete=models.CASCADE)
     batch = models.ForeignKey(batch, on_delete=models.CASCADE)
     section = models.ForeignKey(section, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f"{self.student}--{self.section}--{self.batch}--{self.department}"

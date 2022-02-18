@@ -13,10 +13,43 @@ class UserSerializer(serializers.ModelSerializer):
 class UserExportSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ["password", "id", "last_login", "images","student","staff","admin","department","password_changed"]
+        exclude = [
+            "password",
+            "id",
+            "last_login",
+            "images",
+            "student",
+            "staff",
+            "admin",
+            "department",
+            "password_changed",
+        ]
 
 
 class UserSerializer_std(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ["password", "last_login"]
+
+
+class UserExportSerializer_assessment(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude = [
+            "email",
+            "password",
+            "id",
+            "last_login",
+            "images",
+            "student",
+            "staff",
+            "admin",
+            "department",
+            "password_changed",
+            "phone",
+            "dob",
+            "address",
+            "middle_name",
+            "roll_no",
+            "gender",
+        ]
