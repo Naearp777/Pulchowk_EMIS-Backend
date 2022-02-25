@@ -145,6 +145,7 @@ class ImportUserCSV(APIView):
                         department=department.objects.get(name=user[9]),
                         batch=batch.objects.get(name=user[10]),
                         section=section.objects.get(name=user[11]),
+                        full_name=user[1] + " " + user[2] + " " + user[3],
                     )
                 if serializer.data["staff"] == True:
                     Teachers_info.objects.create(
