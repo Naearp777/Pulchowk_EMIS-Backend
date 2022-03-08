@@ -1,5 +1,6 @@
-from .models import department
-from .serializers import DepartmentSerializer
+from customuser.serializers import UserSerializer_std
+from .models import Departmentadmin_info, department
+from .serializers import DepartmentAdminSerializer, DepartmentSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
@@ -83,3 +84,21 @@ def Department_delete(request, pk):
         )
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_all_dept_admins(request):
+    all_dept_admins = Departmentadmin_info.objects.all()
+    serializer = DepartmentAdminSerializer(all_dept_admins, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_all_dept_admins_for_single_dept(request, alias):
+    dept = department.objects.get(alias=alias)
+    all_dept_admins = Departmentadmin_info.objects.filter(id=dept.id)
+    serializer = DepartmentAdminSerializer(all_dept_admins, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+

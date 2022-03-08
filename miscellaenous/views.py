@@ -6,9 +6,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
 import django_filters
+from department.models import Departmentadmin_info
 from student.models import student_info
 
 from student.serializers import StudentSerializer_search
+import teacher
 from teacher.models import Teachers_info
 from teacher.serializers import TeacherSerialize_search
 
@@ -57,3 +59,17 @@ class filter_teacher(ListAPIView):
     queryset = Teachers_info.objects.all()
     serializer_class = TeacherSerialize_search
     filter_class = TeachertFilter
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_admin_dashboard(request):
+    students = student_info.objects.all().count()
+    teachers = Teachers_info.objects.all().count()
+    dept_admins = Departmentadmin_info.objects.all().count()
+    data = {
+        "students": students,
+        "teachers": teachers,
+        "department_admins" : dept_admins
+    }
+    return Response(data, status=status.HTTP_200_OK)

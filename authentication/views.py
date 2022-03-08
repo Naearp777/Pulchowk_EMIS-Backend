@@ -1,5 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from department.serializers import DepartmentAdminSerializer
 from .serializers import UserSerializerWithToken
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework.response import Response
@@ -10,6 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from department.models import Departmentadmin_info
+
+from authentication import serializers
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -60,7 +64,11 @@ def get_self_department(request):
 
     if (user.department):
         dept = Departmentadmin_info.objects.get(dept_admin=user.id)
-        return Response(dept.department.name, status=status.HTTP_200_OK)
+        serializer = DepartmentAdminSerializer(dept, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else :
+        return Response({data: ''}, status=status.HTTP_200_OK)
+        
 @permission_classes([IsAuthenticated])
 class LogoutView(APIView):
     def post(self, request):

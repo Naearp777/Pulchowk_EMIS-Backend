@@ -65,7 +65,7 @@ def registerUser(request):
             )
         if serializer.data["department"] == True:
             Departmentadmin_info.objects.create(
-                department_admin=User.objects.get(email=data["email"]),
+                dept_admin=User.objects.get(email=data["email"]),
                 department=department.objects.get(name=data["department_name"]),
             )
         email_template = render_to_string(

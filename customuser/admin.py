@@ -15,7 +15,7 @@ class CustomUserAdmin(admin.ModelAdmin):
         ),
         ("Contact Info", {"fields": ("phone", "dob")}),
         ("Profile Image", {"fields": ("images",)}),
-        ("Permissions", {"fields": ("admin", "staff", "student")}),
+        ("Permissions", {"fields": ("admin", "staff", "student", "department")}),
         ("Other Info", {"fields": ("password_changed", "last_login")}),
     )
     list_display = (
@@ -28,8 +28,9 @@ class CustomUserAdmin(admin.ModelAdmin):
         "admin",
         "staff",
         "student",
+        "department",
     )
-    list_filter = ("admin", "staff", "student")
+    list_filter = ("admin", "staff", "student", "department")
     search_fields = (
         "email",
         "first_name",
@@ -40,6 +41,7 @@ class CustomUserAdmin(admin.ModelAdmin):
         "admin",
         "staff",
         "student",
+        "department",
     )
     list_per_page = 25
 
