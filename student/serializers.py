@@ -24,3 +24,11 @@ class StudentSerializer_search(serializers.ModelSerializer):
     class Meta:
         model = student_info
         fields = "__all__"
+class StudentallSerializer(serializers.ModelSerializer):
+    department = DepartmentSerializer(read_only=True, many=False)
+    batch = BatchSerializer(read_only=True, many=False)
+    section = SectionSerializer(read_only=True, many=False)
+
+    class Meta:
+        model = student_info
+        fields = ['full_name','rollno','department','batch','section']

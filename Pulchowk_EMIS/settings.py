@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure--*#h$71mryy$tg!h1p^rb(hvhn=*mxu&oa7(3bltaxu3!ds8hd"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG =True
 ALLOWED_HOSTS = ["pulchowk-emis.herokuapp.com", "*"]
 
 
@@ -176,16 +176,16 @@ WSGI_APPLICATION = "Pulchowk_EMIS.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
-# db_from_env = dj_database_url.config(conn_max_age=600)
-# DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -222,7 +222,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = "static/"
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -247,6 +247,7 @@ CORS_ORIGIN_WHITELIST = (
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -262,5 +263,16 @@ DATABASES = {
 #     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
 #     'API_KEY': os.environ.get('API_KEY'),
 #     'API_SECRET': os.environ.get('API_SECRET')
-# }
-# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "pulchowk_emis",
+#         "USER": "postgres",
+#         "PASSWORD": "admin",
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+
+
+
