@@ -26,4 +26,6 @@ urlpatterns = [
         views.Department_delete,
         name="delete_department",
     ),
+    path("api/view/all_department_admins/", views.show_all_dept_admins, name="show_all_dept_admins"),
+    path("api/view/all_department_admins/for/<str:alias>/", views.show_all_dept_admins_for_single_dept, name="show_all_dept_admins_for_single_dept"),
 ]

@@ -116,3 +116,16 @@ def show_all_folder_in_a_specific_class(request, c_id):
         return Response(
             {"message": "Folder not found"}, status=status.HTTP_404_NOT_FOUND
         )
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_material(request, pk):
+    try:
+        materials.objects.filter(id=pk).delete()
+        return Response(status=status.HTTP_200_OK)
+       
+    except:
+        return Response(
+            {"message": "Folder not deleted"}, status=status.HTTP_400_BAD_REQUEST
+        )

@@ -37,7 +37,7 @@ class Give_AssignmentsAdmin(admin.ModelAdmin):
 
 class Submit_AssignmentsAdmin(admin.ModelAdmin):
     fieldsets = (
-        ("Submission Info", {"fields": ("student", "assignment", "student_files")}),
+        ("Submission Info", {"fields": ("student", "assignment", "student_files", "obtain_points", "marked")}),
     )
     list_display = (
         "student",

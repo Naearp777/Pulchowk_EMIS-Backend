@@ -1,5 +1,8 @@
-from notice.serializers import AssignmentNoticeSerializer, NoticeSerializer, GlobalNoticeSerializer
-from .models import Assignmentnotice, notice, global_notice
+from department.models import Departmentadmin_info, department
+from notice.serializers import AssignmentNoticeSerializer, DepartmentNoticeSerializer, NoticeSerializer, GlobalNoticeSerializer
+from student.models import student_info
+from teacher.models import Teachers_info
+from .models import Assignmentnotice, Department_Notice, notice, Global_Notice
 from classes.models import classes
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -65,14 +68,34 @@ def show_notice(request, c_id):
 @permission_classes([IsAuthenticated])
 def create_globalnotice(request):
     data = request.data
+    print(data)
     try:
-        global_notice.objects.create(
+        Global_Notice.objects.create(
             title=data["title"],
             content=data["content"],
             files=request.FILES.get("files"),
-            publish_to=User.objects.all(),
-            publish_by=data["publish_by"],
+            publish_by=User.objects.get(id=data["publish_by"]),
         )
+
+        # if data["publish_to"] == "all":
+        #     for i in User.objects.all():
+        #         global_n.publish_to.add(i)
+
+        # elif data["publish_to"] == "teacher":
+        #     for i in User.objects.filter(staff=True):
+        #         global_n.publish_to.add(i)
+
+        # elif data["publish_to"] == "student":
+        #     for i in User.objects.filter(student=True):
+        #         global_n.publish_to.add(i)
+                
+        # elif data["publish_to"] == "department":
+        #     for i in User.objects.filter(department=True):
+        #         global_n.publish_to.add(i)
+                
+
+        # global_n.save()
+
         return Response(status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -81,7 +104,19 @@ def create_globalnotice(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_globalnotice(request, pk):
-    shownotice = global_notice.objects.filter(publish_to=pk)
+    try:
+        shownotice = Global_Notice.objects.get(id=pk)
+        serializer = GlobalNoticeSerializer(shownotice, many=False)
+        return Response(serializer.data)
+
+    except Exception as e:
+        return Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def show_all_globalnotices(request): 
+    shownotice = Global_Notice.objects.all()
     serializer = GlobalNoticeSerializer(shownotice, many=True)
     return Response(serializer.data)
 
@@ -117,7 +152,7 @@ def update_notice(request, pk):
 @permission_classes([IsAuthenticated])
 def delete_globalnotice(request, pk):
     try:
-        global_notice.objects.get(id=pk).delete()
+        Global_Notice.objects.get(id=pk).delete()
         return Response(status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -127,7 +162,7 @@ def delete_globalnotice(request, pk):
 @permission_classes([IsAuthenticated])
 def update_globalnotice(request, pk):
     try:
-        update_notice = global_notice.objects.get(id=pk)
+        update_notice = Global_Notice.objects.get(id=pk)
         data = request.data
         update_notice.title = data["title"]
         update_notice.content = data["content"]
@@ -138,3 +173,55 @@ def update_globalnotice(request, pk):
         return Response(status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_deptnotice(request):
+    data = request.data
+
+    try:
+        Department_Notice.objects.create(
+            title=data["title"],
+            content=data["content"],
+            files=request.FILES.get("files"),
+            publish_to=department.objects.get(alias=data["publish_to"]),
+            publish_by=User.objects.get(id=data["publish_by"]),
+        )
+        return Response(status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_deptnotice(request, pk):
+    shownotice = Department_Notice.objects.get(id=pk)
+    serializer = DepartmentNoticeSerializer(shownotice, many=False)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_deptnotice_all_for_a_dept(request, pk):
+    user = User.objects.get(id = pk)
+    if user.student:
+        user_dept = student_info.objects.get(student=user).department
+    elif user.staff:
+        user_dept = Teachers_info.objects.get(teacher=user).department
+    elif user.department:
+        user_dept = Departmentadmin_info.objects.get(dept_admin=user).department
+
+    shownotice = Department_Notice.objects.filter(publish_to=user_dept)
+    serializer = DepartmentNoticeSerializer(shownotice, many=True)
+    return Response(serializer.data)
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_deptnotice(request, pk):
+    try:
+        Department_Notice.objects.get(id=pk).delete()
+        return Response(status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+ 

@@ -3,8 +3,9 @@ from assignments.serializers import Give_AssignmentsSerializer
 
 from classes.serializer import ClassSerializer
 from customuser.serializers import UserSerializer_std
+from department.serializers import DepartmentSerializer
 
-from .models import global_notice, notice,Assignmentnotice
+from .models import Department_Notice, Global_Notice, notice,Assignmentnotice
 
 
 class NoticeSerializer(serializers.ModelSerializer):
@@ -28,10 +29,18 @@ class AssignmentNoticeSerializer(serializers.ModelSerializer):
 
 
 class GlobalNoticeSerializer(serializers.ModelSerializer):
-    publish_to = ClassSerializer(read_only=True, many=False)
     publish_by = UserSerializer_std(read_only=True, many=False)
 
     class Meta:
-        model = global_notice
+        model = Global_Notice
+        fields = "__all__"
+
+
+class DepartmentNoticeSerializer(serializers.ModelSerializer):
+    publish_to = DepartmentSerializer(read_only=True, many=False)
+    publish_by = UserSerializer_std(read_only=True, many=False)
+
+    class Meta:
+        model = Department_Notice
         fields = "__all__"
         

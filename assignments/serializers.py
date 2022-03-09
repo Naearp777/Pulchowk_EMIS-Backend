@@ -25,6 +25,7 @@ class Submit_AssignmentsSerializer(serializers.ModelSerializer):
 
 
 class Calendar_Give_AssignmentsSerializer(serializers.ModelSerializer):
+    classes = ClassSerializer(read_only=True, many=False)
     class Meta:
         model = Give_Assignments
-        exclude = ["created_at", "updated_at", "teacher_files", "classes", "teacher"]
+        fields = "__all__"

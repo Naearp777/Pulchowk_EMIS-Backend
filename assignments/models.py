@@ -30,6 +30,8 @@ class Submit_Assignments(models.Model):
     assignment = models.ForeignKey(Give_Assignments, on_delete=models.CASCADE)
     student_files = models.FileField(upload_to="assignments_submitted")
     obtain_points=models.IntegerField(default=0)
+    marked=models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.student.first_name

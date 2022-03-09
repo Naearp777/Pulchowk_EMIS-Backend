@@ -18,6 +18,7 @@ urlpatterns = [
     path(
         "api/assignment/show/all/<int:c_id>/", views.show_all_assignment_in_specific_class, name="show_all_assignments_in_specific_class"
     ),
+    path("api/assignment/show/assignment/student/<int:a_id>/<int:s_id>/", views.show_assignment_details_of_a_specific_assignment_for_a_student, name="show_assignment_details_of_a_specific_assignment_for_a_student"),
     path(
         "api/assignment/show/all/<int:t_id>/<int:c_id>/",
         views.show_all_assignment_given_by_teacher_in_specific_class,
@@ -68,4 +69,5 @@ urlpatterns = [
         views.show_all_assignments_for_all_class_given_to_specific_student_in_a_month,
         name="show_all_assignments_for_all_class_given_to_specific_student_for_month",
     ),
+    path("api/assignment/submission/mark/<int:a_id>/<int:s_id>/", views.mark_submission_of_a_student_for_an_assignment, name="mark_submission_of_a_student_for_an_assignment")
 ]

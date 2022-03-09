@@ -1,3 +1,4 @@
+import assignments
 from notification.models import Notification
 from .models import Give_Assignments, Submit_Assignments
 from customuser.models import User
@@ -14,6 +15,10 @@ from rest_framework.decorators import api_view
 from notice.models import Assignmentnotice
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
+from django.core.mail.message import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
+from assignments import serializers
 
 # Create your views here.
 
@@ -69,7 +74,7 @@ def submit_assignment(request, a_id, s_id):
         Submit_Assignments.objects.create(
             student=User.objects.get(id=s_id),
             assignment=Give_Assignments.objects.get(id=a_id),
-            obtain_points=data["obtain_points"],
+            # obtain_points=data["obtain_points"],
             student_files=request.FILES.get("student_files"),
         )
         return Response(
@@ -104,6 +109,28 @@ def show_all_assignment_in_specific_class(request, c_id):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+def show_assignment_details_of_a_specific_assignment_for_a_student(request, a_id, s_id):
+    assignmentData = Give_Assignments.objects.get(id=a_id)
+    assignment = Give_AssignmentsSerializer(assignmentData, many=False)
+    try:
+        submissionData = Submit_Assignments.objects.get(
+            assignment=a_id, student=s_id
+        )
+        submission = Submit_AssignmentsSerializer(submissionData, many=False)
+        data = {
+            "assignment": assignment.data,
+            "submission": submission.data,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    except:
+        data = {
+            "assignment": assignment.data,
+            "submission": '',
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def show_submitted_assignments_for_an_assignment(request, a_id):
     showassignment = Submit_Assignments.objects.filter(assignment=a_id)
     serializer = Submit_AssignmentsSerializer(showassignment, many=True)
@@ -134,14 +161,68 @@ def update_assignment(request, pk):
     data = request.data
     try:
         updateassignment = Give_Assignments.objects.get(id=pk)
-        updateassignment.title = data["title"]
-        updateassignment.description = data["description"]
-        updateassignment.due_date = data["due_date"]
-        updateassignment.teacher_files = request.FILES.get("teacher_files")
-        updateassignment.obtain_points = data["obtain_points"]
+        if data["title"] :
+            updateassignment.title = data["title"]
+        if data["description"]:
+            updateassignment.description = data["description"]
+        if data["due_date"]:
+            updateassignment.due_date = data["due_date"]
+        if request.FILES.get("teacher_files"):
+            updateassignment.teacher_files = request.FILES.get("teacher_files")
+        if data["total_points"]:
+            updateassignment.total_points = data["total_points"]
         updateassignment.save()
         return Response(
             {"message": "Assignment updated successfully"},
+            status=status.HTTP_201_CREATED,
+        )
+    except Exception as e:
+        return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def mark_submission_of_a_student_for_an_assignment(request, a_id, s_id):
+    data = request.data
+    print(data)
+    try:
+        updateassignment = Submit_Assignments.objects.get(
+            assignment=a_id, student=s_id
+        )
+    
+        if data["obtain_points"]:
+            updateassignment.obtain_points = data["obtain_points"]
+            updateassignment.marked = True
+            updateassignment.save()
+
+        serializer = Submit_AssignmentsSerializer(updateassignment, many=False)
+
+        user = User.objects.get(id=s_id)
+        assignment = Give_Assignments.objects.get(id=a_id)
+        class_obj = classes.objects.get(id=assignment.classes.id)
+
+        email_template = render_to_string(
+            "submission_marked.html",
+            {
+                "first_name": user.first_name,
+                "assignment": assignment.title,
+                "class": class_obj.name,
+                "marks" : serializer.data["obtain_points"],
+                "total" : assignment.total_points,
+            },
+        )
+
+        sign_up = EmailMultiAlternatives(
+            "Your Assignment Submission has been graded",
+            "Your Assignment Submission has been graded",
+            settings.EMAIL_HOST_USER,
+            [user.email],
+        )
+        sign_up.attach_alternative(email_template, "text/html")
+        sign_up.send()
+
+        return Response(
+            {"message": "Submission marked successfully"},
             status=status.HTTP_201_CREATED,
         )
     except Exception as e:

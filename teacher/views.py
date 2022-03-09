@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from department.models import department
 from teacher.models import Teachers_info
 from .serializers import TeacherSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -9,5 +10,13 @@ from rest_framework.permissions import IsAuthenticated
 @permission_classes([IsAuthenticated])
 def show_all_teacher(request):
     all_teachers = Teachers_info.objects.all()
+    serializer = TeacherSerializer(all_teachers, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_teacher_by_department(request, alias):
+    dept = department.objects.get(alias=alias)
+    all_teachers = Teachers_info.objects.filter(department=dept)
     serializer = TeacherSerializer(all_teachers, many=True)
     return Response(serializer.data)

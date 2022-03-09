@@ -1,9 +1,10 @@
 from batch.models import batch
 from classes.models import classes
 from customuser.models import User
-from department.models import department
+from department.models import Departmentadmin_info, department
 from section.models import section
 from student.models import student_info
+from student.serializers import StudentSerializer, StudentSerializer_search
 from .serializer import ClassSerializer
 from rest_framework import status
 from rest_framework.response import Response
@@ -22,7 +23,7 @@ def create_class(request):
         newclass = classes.objects.create(
             name=data["class_name"],
             alias=data["alias"],
-            department=department.objects.get(name=data["department"]),
+            department=department.objects.get(alias=data["department"]),
         )
         showclass = classes.objects.get(id=newclass.id)
 
@@ -34,7 +35,7 @@ def create_class(request):
             showclass.save()
 
         for s in student_info.objects.filter(
-            department=department.objects.get(name=data["department"]),
+            department=department.objects.get(alias=data["department"]),
             batch=batch.objects.get(name=data["batch"]),
             section=section.objects.get(name=data["section"]),
         ):
@@ -58,12 +59,26 @@ def show_class(request, pk):
     return Response(serializer.data)
 
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_all_class(request):
     all_classes = classes.objects.all()
     serializer = ClassSerializer(all_classes, many=True)
     return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_all_students_in_a_class(request, pk):
+    showclass = classes.objects.get(id=pk)
+    serializer = ClassSerializer(showclass, many=False)
+    students = []
+
+    for s in serializer.data["student"]:
+        s_info = student_info.objects.get(student=s.get("id"))
+        students.append(StudentSerializer(student_info.objects.get(student=s.get("id")), many=False).data)
+        
+    return Response(students)
 
 
 @api_view(["GET"])
@@ -85,7 +100,8 @@ def show_class_by_student(request, pk):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_class_by_department(request, pk):
-    showclass = classes.objects.filter(department=pk)
+    dept = Departmentadmin_info.objects.get(dept_admin=pk)
+    showclass = classes.objects.filter(department=dept.department)
     serializer = ClassSerializer(showclass, many=True)
     return Response(serializer.data)
 

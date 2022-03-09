@@ -20,6 +20,9 @@ urlpatterns = [
         views.show_class_by_department,
         name="show_class_by_department",
     ),
+    path(
+        "api/show/students/in/class/<int:pk>/", views.show_all_students_in_a_class, name="show_all_students_in_a_class"
+    ),
     path("api/update/class/<int:pk>/", views.update_class, name="update_class"),
     path("api/delete/class/<int:pk>/", views.delete_class, name="delete_class"),
 ]
