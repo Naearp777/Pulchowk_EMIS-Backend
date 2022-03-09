@@ -1,3 +1,4 @@
+import assignments
 from notification.models import Notification
 from .models import Give_Assignments, Submit_Assignments
 from customuser.models import User
@@ -14,6 +15,10 @@ from rest_framework.decorators import api_view
 from notice.models import Assignmentnotice
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
+from django.core.mail.message import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
+from assignments import serializers
 
 # Create your views here.
 
@@ -184,11 +189,37 @@ def mark_submission_of_a_student_for_an_assignment(request, a_id, s_id):
         updateassignment = Submit_Assignments.objects.get(
             assignment=a_id, student=s_id
         )
-        print("here")
+    
         if data["obtain_points"]:
             updateassignment.obtain_points = data["obtain_points"]
             updateassignment.marked = True
             updateassignment.save()
+
+        serializer = Submit_AssignmentsSerializer(updateassignment, many=False)
+
+        user = User.objects.get(id=s_id)
+        assignment = Give_Assignments.objects.get(id=a_id)
+        class_obj = classes.objects.get(id=assignment.classes.id)
+
+        email_template = render_to_string(
+            "submission_marked.html",
+            {
+                "first_name": user.first_name,
+                "assignment": assignment.title,
+                "class": class_obj.name,
+                "marks" : serializer.data["obtain_points"],
+                "total" : assignment.total_points,
+            },
+        )
+
+        sign_up = EmailMultiAlternatives(
+            "Your Assignment Submission has been graded",
+            "Your Assignment Submission has been graded",
+            settings.EMAIL_HOST_USER,
+            [user.email],
+        )
+        sign_up.attach_alternative(email_template, "text/html")
+        sign_up.send()
 
         return Response(
             {"message": "Submission marked successfully"},

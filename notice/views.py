@@ -1,5 +1,7 @@
-from department.models import department
+from department.models import Departmentadmin_info, department
 from notice.serializers import AssignmentNoticeSerializer, DepartmentNoticeSerializer, NoticeSerializer, GlobalNoticeSerializer
+from student.models import student_info
+from teacher.models import Teachers_info
 from .models import Assignmentnotice, Department_Notice, notice, Global_Notice
 from classes.models import classes
 from rest_framework.decorators import api_view, permission_classes
@@ -183,9 +185,10 @@ def create_deptnotice(request):
             title=data["title"],
             content=data["content"],
             files=request.FILES.get("files"),
-            publish_to=department.objects.get(name=data["publish_to"]),
+            publish_to=department.objects.get(alias=data["publish_to"]),
             publish_by=User.objects.get(id=data["publish_by"]),
         )
+        return Response(status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -200,10 +203,25 @@ def show_deptnotice(request, pk):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def show_deptnotice_all_for_a_dept(request, alias):
-    dept = department.objects.get(alias=alias)
-    shownotice = Department_Notice.objects.filter(publish_to=dept.id)
+def show_deptnotice_all_for_a_dept(request, pk):
+    user = User.objects.get(id = pk)
+    if user.student:
+        user_dept = student_info.objects.get(student=user).department
+    elif user.staff:
+        user_dept = Teachers_info.objects.get(teacher=user).department
+    elif user.department:
+        user_dept = Departmentadmin_info.objects.get(dept_admin=user).department
+
+    shownotice = Department_Notice.objects.filter(publish_to=user_dept)
     serializer = DepartmentNoticeSerializer(shownotice, many=True)
     return Response(serializer.data)
 
-    
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_deptnotice(request, pk):
+    try:
+        Department_Notice.objects.get(id=pk).delete()
+        return Response(status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+ 

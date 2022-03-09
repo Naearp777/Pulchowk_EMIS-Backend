@@ -12,6 +12,11 @@ urlpatterns = [
         views.upload_materials,
         name="upload_materials",
     ),
+    path(
+        "api/delete/materials/<int:pk>/",
+        views.delete_material,
+        name="delete_material",
+    ),
     path("api/show/folder/<int:pk>/", views.show_folder, name="show_folder"),
     path("api/update/folder/<int:pk>/", views.update_folder, name="update_folder"),
     path("api/delete/folder/<int:pk>/", views.delete_folder, name="delete_folder"),

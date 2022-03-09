@@ -75,4 +75,5 @@ class Department_Notice(models.Model):
         return f"{self.title}"
 
     class Meta:
+        ordering = ("-created_at",)
         verbose_name_plural = "Department Notices"

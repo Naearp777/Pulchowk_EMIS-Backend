@@ -42,6 +42,9 @@ urlpatterns = [
         "api/notice/dept/show/<int:pk>/", views.show_deptnotice, name="show_deptnotice"
     ),
     path(
-        "api/notice/dept/show/all/<str:alias>/", views.show_deptnotice_all_for_a_dept, name="show_deptnotice_all_for_a_dept"
+        "api/notice/dept/show/all/<int:pk>/", views.show_deptnotice_all_for_a_dept, name="show_deptnotice_all_for_a_dept"
+    ),
+    path(
+        "api/notice/dept/delete/<int:pk>/", views.delete_deptnotice, name="delete_deptnotice"
     )
 ]

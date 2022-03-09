@@ -13,6 +13,7 @@ from student.serializers import StudentSerializer_search
 import teacher
 from teacher.models import Teachers_info
 from teacher.serializers import TeacherSerialize_search
+from classes.models import classes
 
 
 # Create your views here
@@ -71,5 +72,24 @@ def show_admin_dashboard(request):
         "students": students,
         "teachers": teachers,
         "department_admins" : dept_admins
+    }
+    return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_student_dashboard(request, pk):
+    classNo = classes.objects.filter(student = pk).count()
+    data = {
+        "classes": classNo,
+    }
+    return Response(data, status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_teacher_dashboard(request, pk):
+    classNo = classes.objects.filter(teacher = pk).count()
+    data = {
+        "classes": classNo,
     }
     return Response(data, status=status.HTTP_200_OK)

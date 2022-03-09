@@ -1,7 +1,9 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from department.serializers import DepartmentAdminSerializer
+from department.serializers import DepartmentAdminSerializer, DepartmentSerializer
+from student.models import student_info
+from teacher.models import Teachers_info
 from .serializers import UserSerializerWithToken
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework.response import Response
@@ -62,9 +64,17 @@ def get_self_department(request):
     user_id = access_token_object['user_id']
     user = User.objects.get(id=user_id)
 
-    if (user.department):
-        dept = Departmentadmin_info.objects.get(dept_admin=user.id)
-        serializer = DepartmentAdminSerializer(dept, many=False)
+    if user.student:
+        user_dept = student_info.objects.get(student=user).department
+        serializer = DepartmentSerializer(user_dept, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif user.staff:
+        user_dept = Teachers_info.objects.get(teacher=user).department
+        serializer = DepartmentSerializer(user_dept, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif (user.department):
+        dept = Departmentadmin_info.objects.get(dept_admin=user.id).department
+        serializer = DepartmentSerializer(dept, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
     else :
         return Response({data: ''}, status=status.HTTP_200_OK)
