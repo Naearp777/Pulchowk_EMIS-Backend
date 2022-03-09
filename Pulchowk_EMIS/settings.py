@@ -234,7 +234,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "campuspulchowk@gmail.com"
 EMAIL_HOST_PASSWORD = "campuspulchowk123"
-DEFAULT_FROM_EMAIL = "Givers Team <noreply@volunteermanagementsystem.com>"
+DEFAULT_FROM_EMAIL = "Pulchowk Team Team <noreply@campuspulchowk.com>"
 
 
 CORS_ORIGIN_ALLOW_ALL = True
