@@ -24,6 +24,8 @@ def create_class(request):
             name=data["class_name"],
             alias=data["alias"],
             department=department.objects.get(alias=data["department"]),
+            batch=batch.objects.get(name=data["batch"]),
+            section=section.objects.get(name=data["section"]),
         )
         showclass = classes.objects.get(id=newclass.id)
 

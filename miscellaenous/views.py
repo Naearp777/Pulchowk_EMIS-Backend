@@ -6,10 +6,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
 import django_filters
-from department.models import Departmentadmin_info
+from department.models import Departmentadmin_info, department
 from student.models import student_info
 
-from student.serializers import StudentSerializer_search
+from student.serializers import StudentSerializer, StudentSerializer_search
 import teacher
 from teacher.models import Teachers_info
 from teacher.serializers import TeacherSerialize_search
@@ -93,3 +93,30 @@ def show_teacher_dashboard(request, pk):
         "classes": classNo,
     }
     return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_department_dashboard(request, alias):
+    dept = department.objects.get(alias = alias)
+    students = student_info.objects.filter(department = dept.id).count()
+    teachers = Teachers_info.objects.filter(department = dept.id).count()
+    classNo = classes.objects.filter(department = dept.id).count()
+    studentMale = student_info.objects.filter(student__gender = 'Male').count()
+    teacherMale =Teachers_info.objects.filter(teacher__gender = 'Male').count()
+
+    data = {
+        "students": {
+            "male": studentMale,
+            "female": students - studentMale,
+            "total": students
+        },
+        "teachers": {
+            "male": teacherMale,
+            "female": teachers - teacherMale,
+            "total": teachers
+        },
+        "classes": classNo,
+    }
+    return Response(data, status=status.HTTP_200_OK)
+

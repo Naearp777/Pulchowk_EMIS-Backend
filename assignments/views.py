@@ -279,11 +279,29 @@ def calendar_view_for_student_for_month(request, c_id, month_id, year_id):
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# @api_view(["GET"])
+# @permission_classes([IsAuthenticated])
+# def show_all_assignments_for_all_class_given_to_specific_student(request, s_id):
+#     showassignment = Give_Assignments.objects.filter(classes__student=s_id)
+#     serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
+#     return Response(serializer.data)
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_all_assignments_for_all_class_given_to_specific_student(request, s_id):
     showassignment = Give_Assignments.objects.filter(classes__student=s_id)
+    submissions = Submit_Assignments.objects.filter(student=s_id)
+
+    for assignment in showassignment:
+        for submission in submissions:
+            if assignment.id == submission.assignment.id:
+                showassignment = showassignment.exclude(id=assignment.id)
+    print(showassignment)
+    # show assignment -> ids
+    # submission -> give assignment . exclude from response
     serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
+    
     return Response(serializer.data)
 
 

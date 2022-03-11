@@ -13,4 +13,5 @@ urlpatterns = [
     path("api/show/admin/dashboard/", views.show_admin_dashboard, name="show_admin_dashboard"),
     path("api/show/student/dashboard/<int:pk>/", views.show_student_dashboard, name="show_student_dashboard"),
     path("api/show/teacher/dashboard/<int:pk>/", views.show_teacher_dashboard, name="show_teacher_dashboard"),
+    path("api/show/department/dashboard/<str:alias>/", views.show_department_dashboard, name="show_department_dashboard"),
 ]
