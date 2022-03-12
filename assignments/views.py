@@ -38,7 +38,7 @@ def create_assignment(request, c_id, t_id):
             teacher_files=request.FILES.get("teacher_files"),
         )
         Assignmentnotice.objects.create(
-            assignment=Give_Assignments.objects.get(id = assignment.id),
+            assignment=Give_Assignments.objects.get(id=assignment.id),
             title=data["title"],
             content=data["description"],
             publish_to=classes.objects.get(id=c_id),
@@ -55,8 +55,7 @@ def create_assignment(request, c_id, t_id):
                         id=classes.objects.get(id=c_id).student.all()[i].id
                     )
                 ),
-                publish_by=User.objects.get(id=t_id)
-                
+                publish_by=User.objects.get(id=t_id),
             )
         return Response(
             {"message": "Assignment created successfully"},
@@ -100,6 +99,7 @@ def show_all_assignment_given_by_teacher_in_specific_class(request, t_id, c_id):
     serializer = Give_AssignmentsSerializer(showassignment, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_all_assignment_in_specific_class(request, c_id):
@@ -107,15 +107,14 @@ def show_all_assignment_in_specific_class(request, c_id):
     serializer = Give_AssignmentsSerializer(showassignment, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_assignment_details_of_a_specific_assignment_for_a_student(request, a_id, s_id):
     assignmentData = Give_Assignments.objects.get(id=a_id)
     assignment = Give_AssignmentsSerializer(assignmentData, many=False)
     try:
-        submissionData = Submit_Assignments.objects.get(
-            assignment=a_id, student=s_id
-        )
+        submissionData = Submit_Assignments.objects.get(assignment=a_id, student=s_id)
         submission = Submit_AssignmentsSerializer(submissionData, many=False)
         data = {
             "assignment": assignment.data,
@@ -125,9 +124,10 @@ def show_assignment_details_of_a_specific_assignment_for_a_student(request, a_id
     except:
         data = {
             "assignment": assignment.data,
-            "submission": '',
+            "submission": "",
         }
         return Response(data, status=status.HTTP_200_OK)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -161,7 +161,7 @@ def update_assignment(request, pk):
     data = request.data
     try:
         updateassignment = Give_Assignments.objects.get(id=pk)
-        if data["title"] :
+        if data["title"]:
             updateassignment.title = data["title"]
         if data["description"]:
             updateassignment.description = data["description"]
@@ -186,10 +186,8 @@ def mark_submission_of_a_student_for_an_assignment(request, a_id, s_id):
     data = request.data
     print(data)
     try:
-        updateassignment = Submit_Assignments.objects.get(
-            assignment=a_id, student=s_id
-        )
-    
+        updateassignment = Submit_Assignments.objects.get(assignment=a_id, student=s_id)
+
         if data["obtain_points"]:
             updateassignment.obtain_points = data["obtain_points"]
             updateassignment.marked = True
@@ -207,8 +205,8 @@ def mark_submission_of_a_student_for_an_assignment(request, a_id, s_id):
                 "first_name": user.first_name,
                 "assignment": assignment.title,
                 "class": class_obj.name,
-                "marks" : serializer.data["obtain_points"],
-                "total" : assignment.total_points,
+                "marks": serializer.data["obtain_points"],
+                "total": assignment.total_points,
             },
         )
 
@@ -297,3 +295,27 @@ def show_all_assignments_for_all_class_given_to_specific_student_in_a_month(
     )
     serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def show_total_marks_of_all_assignments_exceeding_due_date(request, c_id):
+    showassignment = Give_Assignments.objects.filter(classes=c_id)
+    serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
+    total_marks = 0
+    for assignment in serializer.data:
+        if assignment["due_date"] >= datetime.now():
+            total_marks += assignment["total_points"]
+    return Response({"total_marks": total_marks})
+
+@api_view
+@permission_classes([IsAuthenticated])
+def show_total_obtained_marks_of_all_submitted_assignments_exceeding_due_date(request, c_id,s_id):
+    showassignment = Submit_Assignments.objects.filter(assignment__classes=c_id,student=s_id)
+    serializer = Submit_AssignmentsSerializer(showassignment, many=True)
+    total_marks = 0
+    for assignment in serializer.data:
+        if assignment["due_date"] >= datetime.now():
+            total_marks += assignment["obtain_points"]
+    return Response({"total_marks": total_marks})
+   

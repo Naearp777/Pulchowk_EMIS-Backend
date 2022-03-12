@@ -9,7 +9,7 @@ class Attendance(models.Model):
     status = models.CharField(max_length=10, choices=[("P", "Present"), ("A", "Absent")])
 
     def __str__(self):
-        return f"{self.student}--{self.date}--{self.time}--{self.status}"
+        return f"{self.student}--{self.date}--{self.status}"
 
     class Meta:
         verbose_name_plural = "attendance"

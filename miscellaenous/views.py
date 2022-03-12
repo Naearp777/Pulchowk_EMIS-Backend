@@ -93,3 +93,10 @@ def show_teacher_dashboard(request, pk):
         "classes": classNo,
     }
     return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def evaluate_students_by_evaluation_form_for_specific_student(request, pk):
+   pass
+   
