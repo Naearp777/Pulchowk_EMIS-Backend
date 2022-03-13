@@ -94,6 +94,7 @@ def get_student_present_days(request, c_id, s_id):
             Attendance.objects.filter(
                 classes=classes.objects.get(id=c_id),
                 student=student_info.objects.get(id=s_id),
+                status="P",
             )
             .values("date")
             .distinct()

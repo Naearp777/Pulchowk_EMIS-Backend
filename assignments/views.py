@@ -304,11 +304,11 @@ def show_total_marks_of_all_assignments_exceeding_due_date(request, c_id):
     serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
     total_marks = 0
     for assignment in serializer.data:
-        if assignment["due_date"] >= datetime.now():
+        if str(assignment["due_date"] )<= str(datetime.now()):
             total_marks += assignment["total_points"]
     return Response({"total_marks": total_marks})
 
-@api_view
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_total_obtained_marks_of_all_submitted_assignments_exceeding_due_date(request, c_id,s_id):
     showassignment = Submit_Assignments.objects.filter(assignment__classes=c_id,student=s_id)
@@ -318,4 +318,4 @@ def show_total_obtained_marks_of_all_submitted_assignments_exceeding_due_date(re
         if assignment["due_date"] >= datetime.now():
             total_marks += assignment["obtain_points"]
     return Response({"total_marks": total_marks})
-   
+    
