@@ -8,9 +8,7 @@ class EvaluationForm(models.Model):
     classes = models.ForeignKey(classes, on_delete=models.CASCADE)
 
     def __str__(self):
-        return (
-            self.classes.name - self.attendance_percentage - self.assignment_percentage
-        )
+        return str(self.classes.name)
 
     class meta:
         verbose_name_plural = "Evaluation Forms"
