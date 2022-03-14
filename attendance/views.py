@@ -6,7 +6,7 @@ from .models import Attendance
 from classes.models import classes
 from student.models import student_info
 from .serializers import AttendanceSerializer
-from customuser.models import ExcelFileUpload
+from customuser.models import ExcelFileUpload, User
 from django.conf import settings
 import pandas as pd
 
@@ -106,14 +106,13 @@ def get_student_present_days(request, c_id, s_id):
         data = request.data
         users = (
             Attendance.objects.filter(
-                classes=classes.objects.get(id=c_id),
-                student=student_info.objects.get(id=s_id),
-                status="P",
+                classes=classes.objects.get(id=c_id),student=User.objects.get(id=s_id),status=True
             )
             .values("date")
             .distinct()
             .count()
         )
-        return Response({"student_present_days": users}, status=status.HTTP_200_OK)
+        return Response({"present_days": users}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
