@@ -14,6 +14,7 @@ import teacher
 from teacher.models import Teachers_info
 from teacher.serializers import TeacherSerialize_search
 from classes.models import classes
+from .models import EvaluationForm
 
 
 # Create your views here
@@ -71,7 +72,7 @@ def show_admin_dashboard(request):
     data = {
         "students": students,
         "teachers": teachers,
-        "department_admins" : dept_admins
+        "department_admins": dept_admins,
     }
     return Response(data, status=status.HTTP_200_OK)
 
@@ -79,20 +80,22 @@ def show_admin_dashboard(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_student_dashboard(request, pk):
-    classNo = classes.objects.filter(student = pk).count()
+    classNo = classes.objects.filter(student=pk).count()
     data = {
         "classes": classNo,
     }
     return Response(data, status=status.HTTP_200_OK)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_teacher_dashboard(request, pk):
-    classNo = classes.objects.filter(teacher = pk).count()
+    classNo = classes.objects.filter(teacher=pk).count()
     data = {
         "classes": classNo,
     }
     return Response(data, status=status.HTTP_200_OK)
+
 
 
 @api_view(["GET"])
@@ -119,4 +122,30 @@ def show_department_dashboard(request, alias):
         "classes": classNo,
     }
     return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_evaluation_form(request, pk):
+    try:
+        data = request.data
+        EvaluationForm.objects.create(
+            classes=classes.objects.get(id=pk),
+            attendance_percentage=data["attendance_percentage"],
+            assignment_percentage=data["assignment_percentage"],
+        )
+        return Response(
+            {"message": "Evaluation Form Created"}, status=status.HTTP_200_OK
+        )
+    except Exception as e:
+        return Response(
+            {"message": "Evaluation Form Not Created"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def evaluate_students_by_evaluation_form_for_specific_student(request, pk):
+    pass
 

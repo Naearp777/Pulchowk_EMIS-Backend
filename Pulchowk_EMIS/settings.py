@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure--*#h$71mryy$tg!h1p^rb(hvhn=*mxu&oa7(3bltaxu3!ds8hd"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =True
+DEBUG = True
 ALLOWED_HOSTS = ["pulchowk-emis.herokuapp.com", "*"]
 
 
@@ -177,15 +177,15 @@ WSGI_APPLICATION = "Pulchowk_EMIS.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
 
 db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+DATABASES["default"].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -222,7 +222,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -232,9 +232,9 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "volunteermanagementsoftware@gmail.com"
-EMAIL_HOST_PASSWORD = "apqkfwpmhdqtwpee"
-DEFAULT_FROM_EMAIL = "Givers Team <noreply@volunteermanagementsystem.com>"
+EMAIL_HOST_USER = "campuspulchowk@gmail.com"
+EMAIL_HOST_PASSWORD = "campuspulchowk123"
+DEFAULT_FROM_EMAIL = "Pulchowk Team Team <noreply@campuspulchowk.com>"
 
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -273,6 +273,3 @@ DATABASES = {
 #         "HOST": "localhost",
 #         "PORT": "5432",
 #     }
-
-
-
