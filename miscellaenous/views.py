@@ -190,7 +190,6 @@ def evaluate_students_by_evaluation_form_for_specific_student(request, c_id, s_i
         if(Total_working_days == 0 | total_marks == 0):
             performance_points = 0
         else:
-            print('don')
             performance_points = (total_marks_obtained * evaluation.assignment_percentage) / (
                 100 * total_marks
             ) + (Present_days * evaluation.attendance_percentage) / (100 * Total_working_days)
@@ -203,9 +202,12 @@ def evaluate_students_by_evaluation_form_for_specific_student(request, c_id, s_i
                 "assignment_percentage": evaluation.assignment_percentage,
                 "performance_points": performance_points,
             }
+
         return Response(data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
             {"message":str(e)},
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+
