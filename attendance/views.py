@@ -1,3 +1,4 @@
+from pprint import pprint
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -9,21 +10,37 @@ from .serializers import AttendanceSerializer
 from customuser.models import ExcelFileUpload
 from django.conf import settings
 import pandas as pd
+from datetime import datetime
+from classes.serializer import ClassSerializer
 
-#create attendance
-@api_view(['POST'])
-def create_attendance(request,c_id,s_id):
-    data=request.data
+# create attendance
+@api_view(["POST"])
+def create_attendance(request, c_id):
     try:
-        Attendance.objects.create(
-            classes=classes.objects.get(id=c_id),
-            student=student_info.objects.get(id=s_id),
-            date=data['date'],
-            status=data['status']
-        )
+        data = request.data
+        print(data)
+        showclass = classes.objects.get(id=c_id)
+        serializer = ClassSerializer(showclass, many=False)
+
+        for s in serializer.data["student"]:
+            std = student_info.objects.get(student=s.get("id"))
+            # print("std=", std.full_name, std.id)
+            if std.id in data["absent_list"]:
+                # print("absent std=", std.id, std.full_name)
+                aStatus = False
+            else:
+                aStatus = True
+
+            Attendance.objects.create(
+                classes=classes.objects.get(id=c_id),
+                student=student_info.objects.get(id=std.id),
+                date=datetime.now(),
+                status=aStatus,
+            )
         return Response(status=status.HTTP_201_CREATED)
     except Exception as e:
-        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
 
 @permission_classes([IsAuthenticated])
 @api_view(["POST"])
@@ -108,7 +125,7 @@ def get_student_present_days(request, c_id, s_id):
             Attendance.objects.filter(
                 classes=classes.objects.get(id=c_id),
                 student=student_info.objects.get(id=s_id),
-                status="P",
+                status=True,
             )
             .values("date")
             .distinct()
