@@ -15,7 +15,10 @@ from teacher.models import Teachers_info
 from teacher.serializers import TeacherSerialize_search
 from classes.models import classes
 from .models import EvaluationForm
-
+from assignments.models import Give_Assignments,Submit_Assignments
+from assignments.serializers import Submit_AssignmentsSerializer,Calendar_Give_AssignmentsSerializer
+from datetime import datetime
+from attendance.models import Attendance
 
 # Create your views here
 
@@ -146,6 +149,65 @@ def create_evaluation_form(request, pk):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def evaluate_students_by_evaluation_form_for_specific_student(request, pk):
-    pass
+def evaluate_students_by_evaluation_form_for_specific_student(request, c_id, s_id):
+    try:
+        total_marks_obtained = 0
+        total_marks = 0
+        showassignment = Give_Assignments.objects.filter(classes=c_id)
+        serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
+        
+        for assignment in serializer.data:
+            if str(assignment["due_date"]) <= str(datetime.now()):
+                total_marks += assignment["total_points"]
+        showassignment = Submit_Assignments.objects.filter(
+            assignment__classes=c_id, student=s_id
+        )
+        serializer = Submit_AssignmentsSerializer(showassignment, many=True)
+        
+        for assignment in serializer.data:
+            if str(assignment["assignment"]["due_date"]) <= str(datetime.now()):
+                total_marks_obtained += assignment["obtain_points"]
+
+        Total_working_days = (
+            Attendance.objects.filter(classes=classes.objects.get(id=c_id))
+            .values("date")
+            .distinct()
+            .count()
+        )
+        Present_days = (
+            Attendance.objects.filter(
+                classes=classes.objects.get(id=c_id),student=User.objects.get(id=s_id),status=True
+            )
+            .values("date")
+            .distinct()
+            .count()
+        )
+        print(total_marks)
+        print(total_marks_obtained)
+        print(Total_working_days)
+        print(Present_days)
+        evaluation = EvaluationForm.objects.get(classes=c_id)
+        if(Total_working_days == 0 | total_marks == 0):
+            performance_points = 0
+        else:
+            performance_points = (total_marks_obtained * evaluation.assignment_percentage) / (
+                100 * total_marks
+            ) + (Present_days * evaluation.attendance_percentage) / (100 * Total_working_days)
+            data = {
+                "total_marks": total_marks,
+                "total_marks_obtained": total_marks_obtained,
+                "total_working_days": Total_working_days,
+                "present_days": Present_days,
+                "attendance_percentage": evaluation.attendance_percentage,
+                "assignment_percentage": evaluation.assignment_percentage,
+                "performance_points": performance_points,
+            }
+
+        return Response(data, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response(
+            {"message":str(e)},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
 

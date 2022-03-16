@@ -15,5 +15,7 @@ urlpatterns = [
     path("api/show/teacher/dashboard/<int:pk>/", views.show_teacher_dashboard, name="show_teacher_dashboard"),
     path("api/show/department/dashboard/<str:alias>/", views.show_department_dashboard, name="show_department_dashboard"),
     path("api/evaluation/form/create/<int:pk>/", views.create_evaluation_form, name="create_evaluation_form"),
+    path('api/evaluation/performance/point/<int:c_id>/<int:s_id>/', views.evaluate_students_by_evaluation_form_for_specific_student, name="evaluate_students_by_evaluation_form_for_specific_student"),
+   
 
 ]
