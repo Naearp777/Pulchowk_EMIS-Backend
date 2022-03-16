@@ -15,8 +15,11 @@ from teacher.models import Teachers_info
 from teacher.serializers import TeacherSerialize_search
 from classes.models import classes
 from .models import EvaluationForm
-from assignments.models import Give_Assignments,Submit_Assignments
-from assignments.serializers import Submit_AssignmentsSerializer,Calendar_Give_AssignmentsSerializer
+from assignments.models import Give_Assignments, Submit_Assignments
+from assignments.serializers import (
+    Submit_AssignmentsSerializer,
+    Calendar_Give_AssignmentsSerializer,
+)
 from datetime import datetime
 from attendance.models import Attendance
 
@@ -100,27 +103,26 @@ def show_teacher_dashboard(request, pk):
     return Response(data, status=status.HTTP_200_OK)
 
 
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def show_department_dashboard(request, alias):
-    dept = department.objects.get(alias = alias)
-    students = student_info.objects.filter(department = dept.id).count()
-    teachers = Teachers_info.objects.filter(department = dept.id).count()
-    classNo = classes.objects.filter(department = dept.id).count()
-    studentMale = student_info.objects.filter(student__gender = 'Male').count()
-    teacherMale =Teachers_info.objects.filter(teacher__gender = 'Male').count()
+    dept = department.objects.get(alias=alias)
+    students = student_info.objects.filter(department=dept.id).count()
+    teachers = Teachers_info.objects.filter(department=dept.id).count()
+    classNo = classes.objects.filter(department=dept.id).count()
+    studentMale = student_info.objects.filter(student__gender="Male").count()
+    teacherMale = Teachers_info.objects.filter(teacher__gender="Male").count()
 
     data = {
         "students": {
             "male": studentMale,
             "female": students - studentMale,
-            "total": students
+            "total": students,
         },
         "teachers": {
             "male": teacherMale,
             "female": teachers - teacherMale,
-            "total": teachers
+            "total": teachers,
         },
         "classes": classNo,
     }
@@ -155,7 +157,6 @@ def evaluate_students_by_evaluation_form_for_specific_student(request, c_id, s_i
         total_marks = 0
         showassignment = Give_Assignments.objects.filter(classes=c_id)
         serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
-        
         for assignment in serializer.data:
             if str(assignment["due_date"]) <= str(datetime.now()):
                 total_marks += assignment["total_points"]
@@ -163,10 +164,13 @@ def evaluate_students_by_evaluation_form_for_specific_student(request, c_id, s_i
             assignment__classes=c_id, student=s_id
         )
         serializer = Submit_AssignmentsSerializer(showassignment, many=True)
-        
+
+        assignmentsData = []
+
         for assignment in serializer.data:
             if str(assignment["assignment"]["due_date"]) <= str(datetime.now()):
                 total_marks_obtained += assignment["obtain_points"]
+                assignmentsData.append(assignment)
 
         Total_working_days = (
             Attendance.objects.filter(classes=classes.objects.get(id=c_id))
@@ -174,9 +178,13 @@ def evaluate_students_by_evaluation_form_for_specific_student(request, c_id, s_i
             .distinct()
             .count()
         )
+        print("addddddd")
+        std = User.objects.get(id=s_id)
         Present_days = (
             Attendance.objects.filter(
-                classes=classes.objects.get(id=c_id),student=User.objects.get(id=s_id),status=True
+                classes=classes.objects.get(id=c_id),
+                student=student_info.objects.get(student=std.id),
+                status=True,
             )
             .values("date")
             .distinct()
@@ -187,12 +195,17 @@ def evaluate_students_by_evaluation_form_for_specific_student(request, c_id, s_i
         print(Total_working_days)
         print(Present_days)
         evaluation = EvaluationForm.objects.get(classes=c_id)
-        if(Total_working_days == 0 | total_marks == 0):
+        if Total_working_days == 0 | total_marks == 0:
             performance_points = 0
         else:
-            performance_points = (total_marks_obtained * evaluation.assignment_percentage) / (
-                100 * total_marks
-            ) + (Present_days * evaluation.attendance_percentage) / (100 * Total_working_days)
+            performance_points = (
+                total_marks_obtained * evaluation.assignment_percentage
+            ) / (100 * total_marks) + (
+                Present_days * evaluation.attendance_percentage
+            ) / (
+                100 * Total_working_days
+            )
+            p = format(performance_points * 100, ".2f")
             data = {
                 "total_marks": total_marks,
                 "total_marks_obtained": total_marks_obtained,
@@ -200,14 +213,13 @@ def evaluate_students_by_evaluation_form_for_specific_student(request, c_id, s_i
                 "present_days": Present_days,
                 "attendance_percentage": evaluation.attendance_percentage,
                 "assignment_percentage": evaluation.assignment_percentage,
-                "performance_points": performance_points,
+                "performance_points": p,
+                "assignments": assignmentsData,
             }
 
         return Response(data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-            {"message":str(e)},
+            {"message": str(e)},
             status=status.HTTP_400_BAD_REQUEST,
         )
-
-
