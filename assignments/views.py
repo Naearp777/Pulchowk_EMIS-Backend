@@ -1,3 +1,4 @@
+from calendar import c
 import assignments
 from notification.models import Notification
 from .models import Give_Assignments, Submit_Assignments
@@ -27,6 +28,7 @@ from assignments import serializers
 @permission_classes([IsAuthenticated])
 def create_assignment(request, c_id, t_id):
     data = request.data
+    print("test=", classes.objects.get(id=c_id))
     try:
         assignment = Give_Assignments.objects.create(
             classes=classes.objects.get(id=c_id),
@@ -299,7 +301,7 @@ def show_all_assignments_for_all_class_given_to_specific_student(request, s_id):
     # show assignment -> ids
     # submission -> give assignment . exclude from response
     serializer = Calendar_Give_AssignmentsSerializer(showassignment, many=True)
-    
+
     return Response(serializer.data)
 
 
