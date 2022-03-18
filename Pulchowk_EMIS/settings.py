@@ -248,28 +248,19 @@ MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "pulchowk_emis",
-        "USER": "postgres",
-        "PASSWORD": "root",
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
-}
-
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
-#     'API_KEY': os.environ.get('API_KEY'),
-#     'API_SECRET': os.environ.get('API_SECRET')
-
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql",
 #         "NAME": "pulchowk_emis",
 #         "USER": "postgres",
-#         "PASSWORD": "admin",
+#         "PASSWORD": "root",
 #         "HOST": "localhost",
 #         "PORT": "5432",
 #     }
+# }
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
+    'API_KEY': os.environ.get('API_KEY'),
+    'API_SECRET': os.environ.get('API_SECRET')
+}
