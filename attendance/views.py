@@ -34,7 +34,7 @@ def create_attendance(request, c_id):
             Attendance.objects.create(
                 classes=classes.objects.get(id=c_id),
                 student=student_info.objects.get(id=std.id),
-                date=datetime.now(),
+                date=data["date"],
                 status=aStatus,
             )
         return Response(status=status.HTTP_201_CREATED)
@@ -126,7 +126,6 @@ def get_student_present_days(request, c_id, s_id):
                 classes=classes.objects.get(id=c_id),
                 student=student_info.objects.get(id=s_id),
                 status=True,
-
             )
             .values("date")
             .distinct()
@@ -135,4 +134,3 @@ def get_student_present_days(request, c_id, s_id):
         return Response({"present_days": users}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    
