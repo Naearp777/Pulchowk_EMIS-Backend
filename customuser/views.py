@@ -56,7 +56,11 @@ def registerUser(request):
                 department=department.objects.get(name=data["department_name"]),
                 batch=batch.objects.get(name=data["batch"]),
                 section=section.objects.get(name=data["section"]),
-                full_name=user.first_name + " " + user.middle_name + " " + user.last_name,
+                full_name=user.first_name
+                + " "
+                + user.middle_name
+                + " "
+                + user.last_name,
             )
         if serializer.data["staff"] == True:
             Teachers_info.objects.create(
