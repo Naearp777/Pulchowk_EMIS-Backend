@@ -36,3 +36,5 @@ def show_student(request):
     all_students = student_info.objects.all()
     serializer = StudentallSerializer(all_students, many=True)
     return Response(serializer.data)
+
+
